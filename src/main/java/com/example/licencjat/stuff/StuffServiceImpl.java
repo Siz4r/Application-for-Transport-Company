@@ -1,10 +1,7 @@
 package com.example.licencjat.stuff;
 
 import com.example.licencjat.exceptions.IncorrectIdInputException;
-import com.example.licencjat.stuff.models.Stuff;
-import com.example.licencjat.stuff.models.StuffDto;
-import com.example.licencjat.stuff.models.StuffListDto;
-import com.example.licencjat.stuff.models.StuffWebInput;
+import com.example.licencjat.stuff.models.*;
 import com.example.licencjat.user.IdGenerator;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -21,24 +18,30 @@ public class StuffServiceImpl implements StuffService{
     private final ModelMapper mapper;
 
     @Override
-    public void addStuff(StuffWebInput webInput) {
+    public void addStuff(StuffServiceCommand command) {
         var id = idGenerator.generateId();
 
         stuffRepository.save(Stuff.builder()
                 .Id(id)
-                .name(webInput.getName())
-                .prize(webInput.getPrize())
-                .quantity(webInput.getQuantity()).build());
+                .name(command.getWebInput().getName())
+                .prize(command.getWebInput().getPrize())
+                .quantity(command.getWebInput().getQuantity()).build());
     }
 
     @Override
-    public void editStuff(StuffWebInput webInput) {
+    public void editStuff(StuffServiceCommand command) {
+        var stuff = stuffRepository.findById(command.getId()).orElseThrow(() -> new IncorrectIdInputException("Error"));
 
+        stuff.setName(command.getWebInput().getName());
+        stuff.setPrize(command.getWebInput().getPrize());
+        stuff.setQuantity(command.getWebInput().getQuantity());
+
+        stuffRepository.save(stuff);
     }
 
     @Override
-    public void deleteStuff(StuffWebInput webInput) {
-
+    public void deleteStuff(String id) {
+        stuffRepository.deleteById(id);
     }
 
     @Override
