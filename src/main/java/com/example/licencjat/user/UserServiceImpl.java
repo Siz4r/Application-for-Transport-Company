@@ -1,6 +1,7 @@
 package com.example.licencjat.user;
 
 import com.example.licencjat.email.EmailSenderServiceImpl;
+import com.example.licencjat.exceptions.IncorrectIdInputException;
 import com.example.licencjat.user.models.User;
 import com.example.licencjat.user.models.UserDto;
 import com.example.licencjat.user.models.UserListDto;
@@ -23,28 +24,32 @@ public class UserServiceImpl implements UserService{
     private final ModelMapper mapper;
 
     @Override
-    public void addUser(UserServiceCommand command) {
-        new UserDataValidator(userRepository).validateUserCommand(command.getWebInput());
+    public User addUser(UserServiceCommand command) {
+        new UserDataValidator(userRepository).validateUserWebInput(command.getWebInput());
 
         var password = passwordEncoder.encode(command.getWebInput().getPassword());
 
         var id = idGenerator.generateId();
 
-        userRepository.save(
-                User.builder()
-                        .email(command.getWebInput().getEmail())
-                        .firstName(command.getWebInput().getFirstName())
-                        .lastName(command.getWebInput().getLastName())
-                        .phoneNumber(command.getWebInput().getPhoneNumber())
-                        .password(password)
-                        .id(id).build()
-        );
+        var user = User.builder()
+                .email(command.getWebInput().getEmail())
+                .firstName(command.getWebInput().getFirstName())
+                .lastName(command.getWebInput().getLastName())
+                .phoneNumber(command.getWebInput().getPhoneNumber())
+                .password(password)
+                .id(id).build();
+
+        userRepository.save(user);
 
         emailSenderService.sendEmail(command.getWebInput().getEmail());
+
+        return user;
     }
 
     @Override
     public UserDto getUserById(String id) {
+        var user = userRepository.findById(id).orElseThrow(() -> new IncorrectIdInputException(""));
+
         return null;
     }
 
@@ -52,16 +57,25 @@ public class UserServiceImpl implements UserService{
     public List<UserListDto> getUsers() {
         var users = userRepository.findAll();
 
-        return users.stream().map(u -> mapper.map(u, UserListDto.class)).collect(Collectors.toList());
+        return users.stream().map(u ->
+            mapper.map(u, UserListDto.class)
+            ).collect(Collectors.toList());
     }
 
     @Override
     public void deleteAnUser(String id) {
-
+        userRepository.deleteById(id);
     }
 
     @Override
     public void updateAnUser(UserServiceCommand command) {
+        new UserDataValidator(userRepository).validateUserUpdateCommand(command.getUpdateInput());
+        var user = userRepository.findById(command.getId()).orElseThrow(() -> new IncorrectIdInputException(""));
 
+        user.setFirstName(command.getUpdateInput().getFirstName());
+        user.setLastName(command.getUpdateInput().getLastName());
+        user.setPhoneNumber(command.getUpdateInput().getPhoneNumber());
+
+        userRepository.save(user);
     }
 }

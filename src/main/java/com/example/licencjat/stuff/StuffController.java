@@ -1,10 +1,7 @@
 package com.example.licencjat.stuff;
 
-import com.example.licencjat.stuff.models.StuffDto;
-import com.example.licencjat.stuff.models.StuffListDto;
+import com.example.licencjat.stuff.models.*;
 
-import com.example.licencjat.stuff.models.StuffServiceCommand;
-import com.example.licencjat.stuff.models.StuffWebInput;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -39,9 +36,9 @@ public class StuffController {
 
     @PutMapping("{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT, reason = "Resource updated successfully")
-    public void updateAStuff(@PathVariable("id") String id, @Valid @RequestBody StuffWebInput webInput) {
+    public void updateAStuff(@PathVariable("id") String id, @Valid @RequestBody StuffUpdateCommand updateCommand) {
         stuffService.editStuff(StuffServiceCommand.builder()
-                .webInput(webInput)
+                .updateCommand(updateCommand)
                 .id(id).build());
     }
 

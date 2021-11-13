@@ -1,8 +1,10 @@
 package com.example.licencjat.stuff;
 
+import com.example.licencjat.company.CompanyRepository;
 import com.example.licencjat.exceptions.IncorrectIdInputException;
 import com.example.licencjat.stuff.models.*;
 import com.example.licencjat.user.IdGenerator;
+import com.example.licencjat.user.UserRepository;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -16,25 +18,29 @@ public class StuffServiceImpl implements StuffService{
     private final StuffRepository stuffRepository;
     private final IdGenerator idGenerator;
     private final ModelMapper mapper;
+    private final CompanyRepository companyRepository;
 
     @Override
     public void addStuff(StuffServiceCommand command) {
-        var id = idGenerator.generateId();
+        var company = companyRepository.findById(command.getWebInput().getCompanyId()).orElseThrow(() -> new IncorrectIdInputException(""));
 
-        stuffRepository.save(Stuff.builder()
-                .Id(id)
-                .name(command.getWebInput().getName())
-                .prize(command.getWebInput().getPrize())
-                .quantity(command.getWebInput().getQuantity()).build());
+        var stuff = mapper.map(command.getWebInput(), Stuff.class);
+
+        stuff.setId(idGenerator.generateId());
+
+        company.addStuff(stuff);
+
+        companyRepository.save(company);
     }
 
     @Override
     public void editStuff(StuffServiceCommand command) {
         var stuff = stuffRepository.findById(command.getId()).orElseThrow(() -> new IncorrectIdInputException("Error"));
 
-        stuff.setName(command.getWebInput().getName());
-        stuff.setPrize(command.getWebInput().getPrize());
-        stuff.setQuantity(command.getWebInput().getQuantity());
+        stuff.setName(command.getUpdateCommand().getName());
+        stuff.setPrize(command.getUpdateCommand().getPrize());
+        stuff.setQuantity(command.getUpdateCommand().getQuantity());
+        stuff.setDescription(command.getUpdateCommand().getDescription());
 
         stuffRepository.save(stuff);
     }

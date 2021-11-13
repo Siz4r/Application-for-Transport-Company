@@ -1,10 +1,11 @@
 package com.example.licencjat.user.models;
 
+import lombok.Builder;
 import lombok.Getter;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
 
+@Builder
 @Getter
 public class UserWebInput {
     @NotBlank

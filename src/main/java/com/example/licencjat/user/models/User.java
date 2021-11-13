@@ -1,9 +1,13 @@
 package com.example.licencjat.user.models;
 
+import com.example.licencjat.authorities.models.AuthorityGroup;
+import com.example.licencjat.files.models.File;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Builder
 @NoArgsConstructor
@@ -14,10 +18,31 @@ import javax.persistence.Id;
 public class User {
     @Id
     private String id;
-
     private String firstName;
     private String lastName;
     private String email;
     private String password;
     private String phoneNumber;
+
+    @JsonManagedReference
+    @OneToMany(
+            mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<File> files = new ArrayList<>();
+
+    @ManyToMany(cascade = {
+            CascadeType.MERGE,
+            CascadeType.PERSIST
+    })
+    @JoinTable(name = "user_groups",
+            joinColumns =@JoinColumn(name = "customer_id"),
+            inverseJoinColumns = @JoinColumn(name = "group_id"))
+    private List<AuthorityGroup> userGroups= new ArrayList<>();
+
+    public void addFile(File file) {
+        files.add(file);
+        file.setUser(this);
+    }
 }

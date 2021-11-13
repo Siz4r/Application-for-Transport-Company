@@ -7,5 +7,6 @@ import lombok.Getter;
 @Builder
 public class UserServiceCommand {
     private final UserWebInput webInput;
+    private final UserUpdateInput updateInput;
     private final String id;
 }

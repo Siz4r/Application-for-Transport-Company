@@ -6,6 +6,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class StuffServiceCommand {
+    private StuffUpdateCommand updateCommand;
     private StuffWebInput webInput;
     private String id;
 }

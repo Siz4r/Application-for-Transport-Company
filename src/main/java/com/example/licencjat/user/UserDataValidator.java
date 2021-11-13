@@ -3,6 +3,7 @@ package com.example.licencjat.user;
 import com.example.licencjat.email.EmailSenderValidator;
 import com.example.licencjat.exceptions.IncorrectInputDataException;
 import com.example.licencjat.exceptions.WrongEmailException;
+import com.example.licencjat.user.models.UserUpdateInput;
 import com.example.licencjat.user.models.UserWebInput;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import lombok.AllArgsConstructor;
@@ -11,14 +12,24 @@ import lombok.AllArgsConstructor;
 public class UserDataValidator {
     private final UserRepository userRepository;
 
-    public void validateUserCommand(UserWebInput webInput) {
+    public void validateUserWebInput(UserWebInput webInput) {
         var validator = new EmailSenderValidator();
         validator.validateEmail(webInput.getEmail());
-        PhoneNumberUtil.getInstance().isPossibleNumber(webInput.getPhoneNumber(), "PL");
+        if (!PhoneNumberUtil.getInstance().isPossibleNumber(webInput.getPhoneNumber(), "PL")) {
+            throw new IncorrectInputDataException("Wrong phone number");
+        }
 
         checkIfUserWithSuchEmailExists(webInput.getEmail());
         checkIfUserWithSuchPhoneNumberExists(webInput.getPhoneNumber());
         checkFirstOrLastName(new String[]{webInput.getFirstName(), webInput.getLastName()});
+    }
+
+    public void validateUserUpdateCommand(UserUpdateInput updateInput) {
+        if (!PhoneNumberUtil.getInstance().isPossibleNumber(updateInput.getPhoneNumber(), "PL")) {
+            throw new IncorrectInputDataException("Wrong phone number");
+        }
+        checkIfUserWithSuchPhoneNumberExists(updateInput.getPhoneNumber());
+        checkFirstOrLastName(new String[]{updateInput.getFirstName(), updateInput.getLastName()});
     }
 
     private void checkIfUserWithSuchEmailExists(String email) {
