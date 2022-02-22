@@ -1,18 +1,19 @@
 package com.example.licencjat.authorities;
 
+import com.example.licencjat.UI.idGenerator.IdGenerator;
 import com.example.licencjat.authorities.models.AuthorityCommand;
 import com.example.licencjat.authorities.models.AuthorityGroup;
 import com.example.licencjat.authorities.models.AuthorityIdDTO;
 import com.example.licencjat.authorities.models.AuthorityListDTO;
 import com.example.licencjat.exceptions.IncorrectIdInputException;
 import com.example.licencjat.exceptions.IncorrectInputDataException;
-import com.example.licencjat.user.IdGenerator;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -24,7 +25,7 @@ public class AuthorityServiceImpl implements AuthoritiesService {
     private final IdGenerator idGenerator;
 
     @Override
-    public AuthorityIdDTO getAuthorityById(String id) {
+    public AuthorityIdDTO getAuthorityById(UUID id) {
         var authorityGroup = authorityRepository.findById(id).orElseThrow(() -> new IncorrectIdInputException("Error"));
         log.info("Name of got authority: {}", authorityGroup.getName());
 
@@ -44,7 +45,7 @@ public class AuthorityServiceImpl implements AuthoritiesService {
     public void addAuthority(AuthorityCommand command) {
         authorityRepository.save(
                 AuthorityGroup.builder()
-                        .Id(idGenerator.generateId())
+                        .Id(UUID.fromString(idGenerator.generateId()))
                         .code(command.getWebInput().getCode())
                         .name(command.getWebInput().getName()).build());
     }

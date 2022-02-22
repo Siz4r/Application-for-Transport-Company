@@ -1,14 +1,15 @@
-package com.example.licencjat.employee;
+package com.example.licencjat.employee.employeeCRUD;
 
-import com.example.licencjat.employee.models.EmployeeDto;
-import com.example.licencjat.employee.models.EmployeeListDto;
-import com.example.licencjat.employee.models.EmployeeServiceCommand;
+import com.example.licencjat.employee.employeeCRUD.models.EmployeeDto;
+import com.example.licencjat.employee.employeeCRUD.models.EmployeeListDto;
+import com.example.licencjat.employee.employeeCRUD.models.EmployeeServiceCommand;
 import com.example.licencjat.user.models.UserWebInput;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @AllArgsConstructor
@@ -24,7 +25,7 @@ public class EmployeeController {
 
     @GetMapping("{id}")
     @ResponseStatus(value = HttpStatus.OK)
-    public EmployeeDto getEmployeeById(@PathVariable("id") String id) {
+    public EmployeeDto getEmployeeById(@PathVariable("id") UUID id) {
         return service.getEmployeeById(EmployeeServiceCommand.builder().id(id).build());
     }
 
@@ -36,7 +37,7 @@ public class EmployeeController {
 
     @DeleteMapping("{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT, reason = "Resource deleted successfully")
-    public void deleteAnEmployee(@PathVariable("id") String id) {
+    public void deleteAnEmployee(@PathVariable("id") UUID id) {
         service.deleteAnEmployee(EmployeeServiceCommand.builder().id(id).build());
     }
 }

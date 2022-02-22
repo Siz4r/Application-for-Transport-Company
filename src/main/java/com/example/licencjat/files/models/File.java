@@ -5,10 +5,10 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Builder
 @NoArgsConstructor
@@ -18,10 +18,10 @@ import java.time.LocalDateTime;
 @Entity
 public class File {
     @Id
-    private String fileId;
+    private UUID fileId;
     private String cloudinaryId;
     private String fileUrl;
-    private String sendToId;
+    private UUID sendToId;
     private String name;
     private LocalDateTime createdAt;
 

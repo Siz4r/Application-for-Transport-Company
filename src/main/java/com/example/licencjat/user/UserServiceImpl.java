@@ -1,5 +1,6 @@
 package com.example.licencjat.user;
 
+import com.example.licencjat.UI.idGenerator.IdGenerator;
 import com.example.licencjat.email.EmailSenderServiceImpl;
 import com.example.licencjat.exceptions.IncorrectIdInputException;
 import com.example.licencjat.user.models.User;
@@ -12,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -37,7 +39,11 @@ public class UserServiceImpl implements UserService{
                 .lastName(command.getWebInput().getLastName())
                 .phoneNumber(command.getWebInput().getPhoneNumber())
                 .password(password)
-                .id(id).build();
+                .buildingNumber(0)
+                .city("")
+                .postalCode("")
+                .street("")
+                .id(UUID.fromString(id)).build();
 
         userRepository.save(user);
 
@@ -47,10 +53,22 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserDto getUserById(String id) {
+    public UserDto getUserById(UUID id) {
         var user = userRepository.findById(id).orElseThrow(() -> new IncorrectIdInputException(""));
 
-        return null;
+        return mapper.map(user, UserDto.class);
+    }
+
+    @Override
+    public UserDto getUserByEmail(String email) {
+        var user = userRepository.findUserByEmail(email).orElseThrow();
+        return mapper.map(user, UserDto.class);
+    }
+
+    @Override
+    public String getEmail(UUID id) {
+        var user = userRepository.findById(id).orElseThrow();
+        return user.getEmail();
     }
 
     @Override
@@ -63,7 +81,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void deleteAnUser(String id) {
+    public void deleteAnUser(UUID id) {
         userRepository.deleteById(id);
     }
 
@@ -72,9 +90,7 @@ public class UserServiceImpl implements UserService{
         new UserDataValidator(userRepository).validateUserUpdateCommand(command.getUpdateInput());
         var user = userRepository.findById(command.getId()).orElseThrow(() -> new IncorrectIdInputException(""));
 
-        user.setFirstName(command.getUpdateInput().getFirstName());
-        user.setLastName(command.getUpdateInput().getLastName());
-        user.setPhoneNumber(command.getUpdateInput().getPhoneNumber());
+        mapper.map(command.getUpdateInput(), user);
 
         userRepository.save(user);
     }

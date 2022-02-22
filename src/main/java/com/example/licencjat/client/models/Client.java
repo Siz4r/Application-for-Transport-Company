@@ -8,6 +8,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Builder
 @NoArgsConstructor
@@ -17,7 +18,7 @@ import java.util.List;
 @Entity
 public class Client {
     @Id
-    private String id;
+    private UUID id;
 
     @OneToOne(cascade = CascadeType.REMOVE)
     private User user;

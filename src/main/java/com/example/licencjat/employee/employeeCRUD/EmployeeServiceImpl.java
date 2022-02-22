@@ -1,18 +1,21 @@
-package com.example.licencjat.employee;
+package com.example.licencjat.employee.employeeCRUD;
 
-import com.example.licencjat.employee.models.Employee;
-import com.example.licencjat.employee.models.EmployeeDto;
-import com.example.licencjat.employee.models.EmployeeListDto;
-import com.example.licencjat.employee.models.EmployeeServiceCommand;
+import com.example.licencjat.UI.idGenerator.IdGenerator;
+import com.example.licencjat.employee.employeeCRUD.models.Employee;
+import com.example.licencjat.employee.employeeCRUD.models.EmployeeDto;
+import com.example.licencjat.employee.employeeCRUD.models.EmployeeListDto;
+import com.example.licencjat.employee.employeeCRUD.models.EmployeeServiceCommand;
 import com.example.licencjat.exceptions.IncorrectIdInputException;
-import com.example.licencjat.user.IdGenerator;
+import com.example.licencjat.orders.models.Order;
 import com.example.licencjat.user.UserServiceImpl;
 import com.example.licencjat.user.models.UserServiceCommand;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.PropertyMap;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,14 +38,28 @@ public class EmployeeServiceImpl implements EmployeeService{
         var employees = employeeRepository.findAll();
 
         return employees.stream()
-                .map(e -> mapper.map(e, EmployeeListDto.class)).collect(Collectors.toList());
+                .map(this::mapEmployeeToEmployeeListDto
+                ).collect(Collectors.toList());
+    }
+
+    private EmployeeListDto mapEmployeeToEmployeeListDto(Employee e) {
+        var mappedEmployee = mapper.map(e, EmployeeListDto.class);
+        mappedEmployee.setIsAvailable(false);
+        for (Order o :
+                e.getOrderList()) {
+            if (!o.isDone()) {
+                mappedEmployee.setIsAvailable(true);
+            }
+        }
+
+        return mappedEmployee;
     }
 
     @Override
     public void addAnEmployee(EmployeeServiceCommand command) {
         var user = userService.addUser(UserServiceCommand.builder().webInput(command.getWebInput()).build());
 
-        var id = idGenerator.generateId();
+        var id = UUID.fromString(idGenerator.generateId());
 
         employeeRepository.save(Employee.builder().id(id).user(user).build());
     }

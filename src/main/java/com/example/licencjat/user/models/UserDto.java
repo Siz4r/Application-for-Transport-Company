@@ -16,5 +16,8 @@ public class UserDto {
     // w dto ale na poczatek projektu zostanie
     private String password;
     private String phoneNumber;
-    private List<File> files;
+    private String city;
+    private String street;
+    private String postalCode;
+    private Integer buildingNumber;
 }

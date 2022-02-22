@@ -5,12 +5,13 @@ import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.UUID;
 
 
 @Getter
 public class StuffWebInput {
     @NotBlank
-    private String companyId;
+    private UUID companyId;
     @NotNull
     @Range(min = 0, max = 10000)
     private Integer quantity;

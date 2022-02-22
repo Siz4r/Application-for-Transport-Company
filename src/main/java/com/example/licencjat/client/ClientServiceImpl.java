@@ -1,11 +1,11 @@
 package com.example.licencjat.client;
 
+import com.example.licencjat.UI.idGenerator.IdGenerator;
 import com.example.licencjat.client.models.Client;
+import com.example.licencjat.client.models.ClientCommand;
 import com.example.licencjat.client.models.ClientDto;
 import com.example.licencjat.client.models.ClientListDto;
-import com.example.licencjat.client.models.ClientCommand;
 import com.example.licencjat.exceptions.IncorrectIdInputException;
-import com.example.licencjat.user.IdGenerator;
 import com.example.licencjat.user.UserServiceImpl;
 import com.example.licencjat.user.models.UserServiceCommand;
 import lombok.AllArgsConstructor;
@@ -13,6 +13,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,7 +28,7 @@ public class ClientServiceImpl implements ClientService{
     public void addClient(ClientCommand command) {
         var user = userService.addUser(UserServiceCommand.builder().webInput(command.getWebInput()).build());
 
-        var id = idGenerator.generateId();
+        var id = UUID.fromString(idGenerator.generateId());
 
         clientRepository.save(Client.builder().id(id).user(user).build());
     }

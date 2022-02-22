@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @RestController
@@ -27,7 +28,7 @@ public class AuthoritiesController {
     @PutMapping("/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void editAuthority(@Valid @RequestBody AuthorityWebInput webInput,
-                              @PathVariable("id") String id) {
+                              @PathVariable("id") UUID id) {
         authoritiesService.updateAuthority(AuthorityCommand.builder()
                 .webInput(webInput)
                 .authorityId(id).build());
@@ -35,14 +36,14 @@ public class AuthoritiesController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void deleteAuthority(@PathVariable("id") String id) {
+    public void deleteAuthority(@PathVariable("id") UUID id) {
         authoritiesService.deleteAuthority(AuthorityCommand.builder()
                 .authorityId(id).build());
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public AuthorityIdDTO getAuthority(@PathVariable("id") String id) {
+    public AuthorityIdDTO getAuthority(@PathVariable("id") UUID id) {
         return authoritiesService.getAuthorityById(id);
     }
 

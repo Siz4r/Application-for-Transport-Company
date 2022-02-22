@@ -4,9 +4,11 @@ import com.example.licencjat.user.models.UserWebInput;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.UUID;
+
 @Builder
 @Getter
 public class ClientCommand {
     private final UserWebInput webInput;
-    private final String id;
+    private final UUID id;
 }

@@ -1,25 +1,24 @@
 package com.example.licencjat.files;
 
 import com.cloudinary.Cloudinary;
-import com.cloudinary.api.ApiResponse;
 import com.cloudinary.utils.ObjectUtils;
-import com.example.licencjat.exceptions.CloudinaryDeleteException;
+import com.example.licencjat.UI.idGenerator.IdGenerator;
 import com.example.licencjat.exceptions.IncorrectIdInputException;
 import com.example.licencjat.files.models.File;
 import com.example.licencjat.files.models.FileDto;
 import com.example.licencjat.files.models.FileListDto;
 import com.example.licencjat.files.models.FileUploadCommand;
-import com.example.licencjat.user.IdGenerator;
 import com.example.licencjat.user.UserRepository;
-import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -46,7 +45,7 @@ public class FileServiceImpl implements FileService{
         var date = LocalDateTime.now();
 
         user.addFile(File.builder()
-                .fileId(idGenerator.generateId())
+                .fileId(UUID.fromString(idGenerator.generateId()))
                 .cloudinaryId(result.get("public_id").toString())
                 .createdAt(date)
                 .fileUrl((String) result.get("secure_url"))
@@ -57,7 +56,7 @@ public class FileServiceImpl implements FileService{
     }
 
     @Override
-    public void deleteAnImage(String id) throws Exception {
+    public void deleteAnImage(UUID id) throws Exception {
         var file = fileRepository.findById(id).orElseThrow(() -> new IncorrectIdInputException(""));
 
         cloudinary.api().deleteResources(Collections.singletonList(file.getCloudinaryId()), ObjectUtils.emptyMap());
@@ -75,7 +74,7 @@ public class FileServiceImpl implements FileService{
     }
 
     @Override
-    public FileDto getFileById(String id) {
+    public FileDto getFileById(UUID id) {
         var file = fileRepository.findById(id).orElseThrow(() -> new IncorrectIdInputException(""));
 
         return mapper.map(file, FileDto.class);

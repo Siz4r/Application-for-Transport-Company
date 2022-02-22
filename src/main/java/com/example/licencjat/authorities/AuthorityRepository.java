@@ -6,9 +6,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
-public interface AuthorityRepository extends JpaRepository<AuthorityGroup, String> {
+public interface AuthorityRepository extends JpaRepository<AuthorityGroup, UUID> {
     @PreAuthorize("hasAnyAuthority('PROJECTS_NAMES', 'PROJECTS_CRE-DEL', 'USERS_CRUD')")
     Optional<AuthorityGroup> findByCode(String code);
 }

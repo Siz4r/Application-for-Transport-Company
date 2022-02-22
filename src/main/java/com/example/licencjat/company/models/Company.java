@@ -10,6 +10,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Builder
 @NoArgsConstructor
@@ -19,9 +20,12 @@ import java.util.List;
 @Entity
 public class Company {
     @Id
-    private String id;
+    private UUID id;
     private String name;
-    private String address;
+    private String city;
+    private String street;
+    private String postalCode;
+    private Integer buildingNumber;
 
     @JsonManagedReference
     @OneToMany(

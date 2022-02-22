@@ -29,7 +29,6 @@ public class UserDataValidator {
             throw new IncorrectInputDataException("Wrong phone number");
         }
         checkIfUserWithSuchPhoneNumberExists(updateInput.getPhoneNumber());
-        checkFirstOrLastName(new String[]{updateInput.getFirstName(), updateInput.getLastName()});
     }
 
     private void checkIfUserWithSuchEmailExists(String email) {

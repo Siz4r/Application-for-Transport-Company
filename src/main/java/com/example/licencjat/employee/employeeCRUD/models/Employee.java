@@ -1,4 +1,4 @@
-package com.example.licencjat.employee.models;
+package com.example.licencjat.employee.employeeCRUD.models;
 
 import com.example.licencjat.orders.models.Order;
 import com.example.licencjat.user.models.User;
@@ -6,8 +6,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Builder
 @NoArgsConstructor
@@ -17,7 +16,7 @@ import java.util.List;
 @Entity
 public class Employee {
     @Id
-    private String id;
+    private UUID id;
 
     @OneToOne(cascade = CascadeType.REMOVE)
     private User user;
@@ -25,13 +24,17 @@ public class Employee {
     @JsonManagedReference
     @OneToMany(
             mappedBy = "employee",
-            cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    private List<Order> orderList = new ArrayList<>();
+    private Set<Order> orderList = new HashSet<>();
 
     public void addOrder(Order order) {
         orderList.add(order);
         order.setEmployee(this);
+    }
+
+    public void deleteOrder(Order order) {
+        orderList.remove(order);
+        order.setEmployee(null);
     }
 }

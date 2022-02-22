@@ -8,6 +8,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Builder
 @NoArgsConstructor
@@ -17,12 +18,16 @@ import java.util.List;
 @Entity(name = "UserData")
 public class User {
     @Id
-    private String id;
+    private UUID id;
     private String firstName;
     private String lastName;
     private String email;
     private String password;
     private String phoneNumber;
+    private String city;
+    private String street;
+    private String postalCode;
+    private Integer buildingNumber;
 
     @JsonManagedReference
     @OneToMany(

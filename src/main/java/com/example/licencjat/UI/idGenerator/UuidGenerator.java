@@ -1,4 +1,4 @@
-package com.example.licencjat.user;
+package com.example.licencjat.UI.idGenerator;
 
 import org.springframework.stereotype.Component;
 

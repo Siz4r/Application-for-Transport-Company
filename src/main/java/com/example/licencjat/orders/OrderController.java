@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.UUID;
 
 @AllArgsConstructor
 @RestController
@@ -23,9 +24,9 @@ public class OrderController {
 
     @PostMapping("{stuffId}/{clientId}")
     @ResponseStatus(value = HttpStatus.CREATED, reason = "Resource created successfully")
-    public void addStuff(@Valid @RequestBody OrderWebInput webInput,
-                         @PathVariable("stuffId") String stuffId,
-                         @PathVariable("clientId") String clientId) {
+    public void addOrder(@Valid @RequestBody OrderWebInput webInput,
+                         @PathVariable("stuffId") UUID stuffId,
+                         @PathVariable("clientId") UUID clientId) {
         orderService.addOrder(OrderCommand.builder()
                 .stuffId(stuffId)
                 .clientId(clientId)
@@ -34,19 +35,19 @@ public class OrderController {
 
     @GetMapping
     @ResponseStatus(value = HttpStatus.OK)
-    public List<OrderListDto> getStuffs() {
+    public List<OrderListDto> getOrders() {
         return orderService.getOrders();
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public OrderDto getOrderById(@PathVariable("id") String id) {
+    public OrderDto getOrderById(@PathVariable("id") UUID id) {
         return orderService.getOrderById(OrderCommand.builder().orderId(id).build());
     }
 
     @DeleteMapping("{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT, reason = "Resource deleted successfully")
-    public void deleteStuff(@PathVariable("id") String id) {
+    public void deleteOrder(@PathVariable("id") UUID id) {
         orderService.deleteOrder(OrderCommand.builder().orderId(id).build());
     }
 }

@@ -9,13 +9,13 @@ import javax.validation.constraints.NotBlank;
 @Getter
 public class UserWebInput {
     @NotBlank
-    private String firstName;
+    private final String firstName;
     @NotBlank
-    private String lastName;
+    private final String lastName;
     @NotBlank
-    private String email;
+    private final String email;
     @NotBlank
-    private String phoneNumber;
+    private final String phoneNumber;
     @NotBlank
-    private String password;
+    private final String password;
 }

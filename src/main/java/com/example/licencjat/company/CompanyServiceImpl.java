@@ -1,16 +1,17 @@
 package com.example.licencjat.company;
 
+import com.example.licencjat.UI.idGenerator.IdGenerator;
 import com.example.licencjat.company.models.Company;
 import com.example.licencjat.company.models.CompanyDto;
 import com.example.licencjat.company.models.CompanyListDto;
 import com.example.licencjat.company.models.CompanyServiceCommand;
 import com.example.licencjat.exceptions.IncorrectIdInputException;
-import com.example.licencjat.user.IdGenerator;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -44,7 +45,7 @@ public class CompanyServiceImpl implements CompanyService{
     @Override
     public void addCompany(CompanyServiceCommand command) {
         var company = mapper.map(command.getWebInput(), Company.class);
-        company.setId(idGenerator.generateId());
+        company.setId(UUID.fromString(idGenerator.generateId()));
 
         repository.save(company);
     }

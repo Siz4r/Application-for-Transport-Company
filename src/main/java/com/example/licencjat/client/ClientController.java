@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @AllArgsConstructor
@@ -24,7 +25,7 @@ public class ClientController {
 
     @GetMapping("{id}")
     @ResponseStatus(value = HttpStatus.OK)
-    public ClientDto getClientById(@PathVariable("id") String id) {
+    public ClientDto getClientById(@PathVariable("id") UUID id) {
         return service.getClientById(ClientCommand.builder().id(id).build());
     }
 
@@ -36,7 +37,7 @@ public class ClientController {
 
     @DeleteMapping("{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT, reason = "Resource deleted successfully")
-    public void deleteAClient(@PathVariable("id") String id) {
+    public void deleteAClient(@PathVariable("id") UUID id) {
         service.deleteClient(ClientCommand.builder().id(id).build());
     }
 }

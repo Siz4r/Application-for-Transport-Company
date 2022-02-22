@@ -1,15 +1,15 @@
 package com.example.licencjat.stuff;
 
+import com.example.licencjat.UI.idGenerator.IdGenerator;
 import com.example.licencjat.company.CompanyRepository;
 import com.example.licencjat.exceptions.IncorrectIdInputException;
 import com.example.licencjat.stuff.models.*;
-import com.example.licencjat.user.IdGenerator;
-import com.example.licencjat.user.UserRepository;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -26,7 +26,7 @@ public class StuffServiceImpl implements StuffService{
 
         var stuff = mapper.map(command.getWebInput(), Stuff.class);
 
-        stuff.setId(idGenerator.generateId());
+        stuff.setId(UUID.fromString(idGenerator.generateId()));
 
         company.addStuff(stuff);
 
@@ -46,12 +46,12 @@ public class StuffServiceImpl implements StuffService{
     }
 
     @Override
-    public void deleteStuff(String id) {
+    public void deleteStuff(UUID id) {
         stuffRepository.deleteById(id);
     }
 
     @Override
-    public StuffDto getStuffById(String id) {
+    public StuffDto getStuffById(UUID id) {
         var stuff = stuffRepository.findById(id).orElseThrow(() -> new IncorrectIdInputException("Error"));
         return mapper.map(stuff, StuffDto.class);
     }

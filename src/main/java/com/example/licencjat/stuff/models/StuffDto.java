@@ -14,4 +14,5 @@ public class StuffDto {
     private int prize;
     private String description;
     private List<Order> orderList;
+    private String companyName;
 }

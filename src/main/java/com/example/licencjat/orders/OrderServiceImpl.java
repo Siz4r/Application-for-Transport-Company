@@ -1,5 +1,6 @@
 package com.example.licencjat.orders;
 
+import com.example.licencjat.UI.idGenerator.IdGenerator;
 import com.example.licencjat.client.ClientRepository;
 import com.example.licencjat.exceptions.IncorrectIdInputException;
 import com.example.licencjat.exceptions.NotEnoughResourceAmount;
@@ -9,12 +10,12 @@ import com.example.licencjat.orders.models.Order;
 import com.example.licencjat.orders.models.OrderListDto;
 import com.example.licencjat.stuff.StuffRepository;
 import com.example.licencjat.stuff.models.Stuff;
-import com.example.licencjat.user.IdGenerator;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,7 +36,7 @@ public class OrderServiceImpl implements OrderService {
 
         //Create
         var order = mapper.map(command.getWebInput(), Order.class);
-        order.setId(idGenerator.generateId());
+        order.setId(UUID.fromString(idGenerator.generateId()));
 
         //SetStuff
         stuff.setQuantity(stuff.getQuantity() - command.getWebInput().getAmount());

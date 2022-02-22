@@ -7,10 +7,11 @@ import com.example.licencjat.files.models.FileUploadCommand;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 interface FileService {
     void updateAnImage(FileUploadCommand command) throws IOException;
-    void deleteAnImage(String id) throws Exception;
+    void deleteAnImage(UUID id) throws Exception;
     List<FileListDto> getFiles();
-    FileDto getFileById(String id);
+    FileDto getFileById(UUID id);
 }

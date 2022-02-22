@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.UUID;
 
 @AllArgsConstructor
 @RestController
@@ -31,7 +32,7 @@ public class CompanyController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public CompanyDto getCompanyById(@PathVariable("id") String id) {
+    public CompanyDto getCompanyById(@PathVariable("id") UUID id) {
         return companyService.getCompanyById(CompanyServiceCommand.builder().id(id).build());
     }
 
@@ -45,7 +46,7 @@ public class CompanyController {
 
     @DeleteMapping("{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT, reason = "Resource deleted successfully")
-    public void deleteStuff(@PathVariable("id") String id) {
+    public void deleteStuff(@PathVariable("id") UUID id) {
         companyService.deleteCompany(CompanyServiceCommand.builder().id(id).build());
     }
 }

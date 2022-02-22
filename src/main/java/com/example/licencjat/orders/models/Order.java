@@ -1,7 +1,7 @@
 package com.example.licencjat.orders.models;
 
 import com.example.licencjat.client.models.Client;
-import com.example.licencjat.employee.models.Employee;
+import com.example.licencjat.employee.employeeCRUD.models.Employee;
 import com.example.licencjat.stuff.models.Stuff;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
@@ -9,6 +9,7 @@ import lombok.*;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import java.util.UUID;
 
 @Builder
 @NoArgsConstructor
@@ -18,7 +19,7 @@ import javax.persistence.ManyToOne;
 @Entity(name = "Stuff_order")
 public class Order {
     @Id
-    private String id;
+    private UUID id;
 
     @JsonBackReference
     @ManyToOne
@@ -33,4 +34,5 @@ public class Order {
     private Stuff stuff;
 
     private int amount;
+    private boolean isDone;
 }

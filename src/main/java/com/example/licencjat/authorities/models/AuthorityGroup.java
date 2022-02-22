@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Builder
@@ -14,7 +15,7 @@ import java.util.List;
 @Table(name = "principle_groups")
 public class AuthorityGroup {
     @Id
-    private String Id;
+    private UUID Id;
 
     @Column(unique = true, nullable = false)
     private String code;
