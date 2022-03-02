@@ -17,9 +17,7 @@ public class EmployeeDto {
     private String userFirstName;
     private String userLastName;
     private String userEmail;
-    private String userPassword;
     private String userPhoneNumber;
 
-    private List<File> userFiles = new ArrayList<>();
     private Set<OrderDto> employeeOrderList;
 }

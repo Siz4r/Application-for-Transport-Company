@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User addUser(UserServiceCommand command) {
-        new UserDataValidator(userRepository).validateUserWebInput(command.getWebInput());
+        new UserDataValidator(userRepository).validateUserWebInput(command.getWebInput(), command.getId());
 
         var password = passwordEncoder.encode(command.getWebInput().getPassword());
 
@@ -87,7 +87,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public void updateAnUser(UserServiceCommand command) {
-        new UserDataValidator(userRepository).validateUserUpdateCommand(command.getUpdateInput());
+        new UserDataValidator(userRepository).validateUserUpdateCommand(command.getUpdateInput(), command.getId());
         var user = userRepository.findById(command.getId()).orElseThrow(() -> new IncorrectIdInputException(""));
 
         mapper.map(command.getUpdateInput(), user);

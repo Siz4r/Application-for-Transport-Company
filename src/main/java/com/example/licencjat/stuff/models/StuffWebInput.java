@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @Getter
 public class StuffWebInput {
-    @NotBlank
+    @NotNull
     private UUID companyId;
     @NotNull
     @Range(min = 0, max = 10000)

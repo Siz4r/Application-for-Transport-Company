@@ -2,17 +2,20 @@ package com.example.licencjat.user;
 
 import com.example.licencjat.email.EmailSenderValidator;
 import com.example.licencjat.exceptions.IncorrectInputDataException;
+import com.example.licencjat.exceptions.IncorrectPhoneNumberException;
 import com.example.licencjat.exceptions.WrongEmailException;
 import com.example.licencjat.user.models.UserUpdateInput;
 import com.example.licencjat.user.models.UserWebInput;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import lombok.AllArgsConstructor;
 
+import java.util.UUID;
+
 @AllArgsConstructor
 public class UserDataValidator {
     private final UserRepository userRepository;
 
-    public void validateUserWebInput(UserWebInput webInput) {
+    public void validateUserWebInput(UserWebInput webInput, UUID id) {
         var validator = new EmailSenderValidator();
         validator.validateEmail(webInput.getEmail());
         if (!PhoneNumberUtil.getInstance().isPossibleNumber(webInput.getPhoneNumber(), "PL")) {
@@ -20,15 +23,15 @@ public class UserDataValidator {
         }
 
         checkIfUserWithSuchEmailExists(webInput.getEmail());
-        checkIfUserWithSuchPhoneNumberExists(webInput.getPhoneNumber());
+        checkIfUserWithSuchPhoneNumberExists(webInput.getPhoneNumber(), id);
         checkFirstOrLastName(new String[]{webInput.getFirstName(), webInput.getLastName()});
     }
 
-    public void validateUserUpdateCommand(UserUpdateInput updateInput) {
+    public void validateUserUpdateCommand(UserUpdateInput updateInput, UUID id) {
         if (!PhoneNumberUtil.getInstance().isPossibleNumber(updateInput.getPhoneNumber(), "PL")) {
-            throw new IncorrectInputDataException("Wrong phone number");
+            throw new IncorrectPhoneNumberException("Wrong phone number");
         }
-        checkIfUserWithSuchPhoneNumberExists(updateInput.getPhoneNumber());
+        checkIfUserWithSuchPhoneNumberExists(updateInput.getPhoneNumber(), id);
     }
 
     private void checkIfUserWithSuchEmailExists(String email) {
@@ -38,10 +41,12 @@ public class UserDataValidator {
         }
     }
 
-    private void checkIfUserWithSuchPhoneNumberExists(String username) {
-        var user = userRepository.findUserByPhoneNumber(username);
+    private void checkIfUserWithSuchPhoneNumberExists(String phoneNumber, UUID id) {
+        var user = userRepository.findUserByPhoneNumber(phoneNumber);
         if (user.isPresent()) {
-            throw new IncorrectInputDataException("There is already user with such username!");
+            if (!user.get().getId().equals(id)){
+                throw new IncorrectPhoneNumberException("There is already user with such phone number!");
+            }
         }
     }
 

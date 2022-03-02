@@ -11,4 +11,5 @@ interface OrderService {
     void deleteOrder(OrderCommand command);
     List<OrderListDto> getOrders();
     OrderDto getOrderById(OrderCommand command);
+    void markOrderAsDoen(OrderCommand command);
 }

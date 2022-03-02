@@ -50,4 +50,10 @@ public class OrderController {
     public void deleteOrder(@PathVariable("id") UUID id) {
         orderService.deleteOrder(OrderCommand.builder().orderId(id).build());
     }
+
+    @PutMapping("{id}")
+    @ResponseStatus(value = HttpStatus.ACCEPTED, reason = "Resource deleted successfully")
+    public void markOrderAsDone(@PathVariable("id") UUID id) {
+        orderService.markOrderAsDoen(OrderCommand.builder().orderId(id).build());
+    }
 }

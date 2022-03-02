@@ -44,11 +44,11 @@ public class EmployeeServiceImpl implements EmployeeService{
 
     private EmployeeListDto mapEmployeeToEmployeeListDto(Employee e) {
         var mappedEmployee = mapper.map(e, EmployeeListDto.class);
-        mappedEmployee.setIsAvailable(false);
+        mappedEmployee.setIsAvailable(true);
         for (Order o :
                 e.getOrderList()) {
             if (!o.isDone()) {
-                mappedEmployee.setIsAvailable(true);
+                mappedEmployee.setIsAvailable(false);
             }
         }
 

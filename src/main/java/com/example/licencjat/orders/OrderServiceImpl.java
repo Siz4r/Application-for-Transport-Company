@@ -37,6 +37,7 @@ public class OrderServiceImpl implements OrderService {
         //Create
         var order = mapper.map(command.getWebInput(), Order.class);
         order.setId(UUID.fromString(idGenerator.generateId()));
+        order.setDone(false);
 
         //SetStuff
         stuff.setQuantity(stuff.getQuantity() - command.getWebInput().getAmount());
@@ -68,6 +69,15 @@ public class OrderServiceImpl implements OrderService {
         var order = orderRepository.findById(command.getOrderId()).orElseThrow(() -> new IncorrectIdInputException(""));
 
         return mapper.map(order, OrderDto.class);
+    }
+
+    @Override
+    public void markOrderAsDoen(OrderCommand command) {
+        var order = orderRepository.findById(command.getOrderId()).orElseThrow(() -> new IncorrectIdInputException(""));
+
+        order.setDone(true);
+
+        orderRepository.save(order);
     }
 
     private void checkIfThereIsEnoughAmount(OrderCommand command, Stuff stuff) {
