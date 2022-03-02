@@ -10,5 +10,5 @@ import java.util.UUID;
 public class FileListDto {
     private UUID fileId;
     private String fileUrl;
-    private String name;
+    private String names;
 }
