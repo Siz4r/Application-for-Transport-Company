@@ -3,7 +3,7 @@ package com.example.licencjat.client;
 import com.example.licencjat.client.models.ClientDto;
 import com.example.licencjat.client.models.ClientListDto;
 import com.example.licencjat.client.models.ClientCommand;
-import com.example.licencjat.user.models.UserWebInput;
+import com.example.licencjat.userData.models.UserWebInput;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

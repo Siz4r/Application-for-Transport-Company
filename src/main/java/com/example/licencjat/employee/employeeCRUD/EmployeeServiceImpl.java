@@ -5,13 +5,12 @@ import com.example.licencjat.employee.employeeCRUD.models.Employee;
 import com.example.licencjat.employee.employeeCRUD.models.EmployeeDto;
 import com.example.licencjat.employee.employeeCRUD.models.EmployeeListDto;
 import com.example.licencjat.employee.employeeCRUD.models.EmployeeServiceCommand;
-import com.example.licencjat.exceptions.IncorrectIdInputException;
+import com.example.licencjat.exceptions.NotFoundExceptions.IncorrectIdInputException;
 import com.example.licencjat.orders.models.Order;
-import com.example.licencjat.user.UserServiceImpl;
-import com.example.licencjat.user.models.UserServiceCommand;
+import com.example.licencjat.userData.UserServiceImpl;
+import com.example.licencjat.userData.models.UserServiceCommand;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.PropertyMap;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,7 +27,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 
     @Override
     public EmployeeDto getEmployeeById(EmployeeServiceCommand command) {
-        var employee = employeeRepository.findById(command.getId()).orElseThrow(() -> new IncorrectIdInputException(""));
+        var employee = employeeRepository.findById(command.getId()).orElseThrow(IncorrectIdInputException::new);
 
         return mapper.map(employee, EmployeeDto.class);
     }

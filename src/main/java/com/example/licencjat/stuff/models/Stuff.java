@@ -2,7 +2,6 @@ package com.example.licencjat.stuff.models;
 
 import com.example.licencjat.company.models.Company;
 import com.example.licencjat.orders.models.Order;
-import com.example.licencjat.user.models.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;

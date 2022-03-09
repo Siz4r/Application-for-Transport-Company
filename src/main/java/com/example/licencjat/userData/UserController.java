@@ -1,6 +1,6 @@
-package com.example.licencjat.user;
+package com.example.licencjat.userData;
 
-import com.example.licencjat.user.models.*;
+import com.example.licencjat.userData.models.*;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -25,13 +25,13 @@ public class UserController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<UserListDto> getUsers() {
+    public List<UserDataListDto> getUsers() {
         return userService.getUsers();
     }
 
     @GetMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
-    public UserDto getUserById(@PathVariable UUID id) {
+    public UserDataDto getUserById(@PathVariable UUID id) {
         return userService.getUserById(id);
     }
 

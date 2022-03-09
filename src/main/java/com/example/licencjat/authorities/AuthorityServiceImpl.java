@@ -5,8 +5,8 @@ import com.example.licencjat.authorities.models.AuthorityCommand;
 import com.example.licencjat.authorities.models.AuthorityGroup;
 import com.example.licencjat.authorities.models.AuthorityIdDTO;
 import com.example.licencjat.authorities.models.AuthorityListDTO;
-import com.example.licencjat.exceptions.IncorrectIdInputException;
-import com.example.licencjat.exceptions.IncorrectInputDataException;
+import com.example.licencjat.exceptions.NotFoundExceptions.IncorrectIdInputException;
+import com.example.licencjat.exceptions.IllegalArgumentExceptions.IncorrectInputDataException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -26,17 +26,14 @@ public class AuthorityServiceImpl implements AuthoritiesService {
 
     @Override
     public AuthorityIdDTO getAuthorityById(UUID id) {
-        var authorityGroup = authorityRepository.findById(id).orElseThrow(() -> new IncorrectIdInputException("Error"));
-        log.info("Name of got authority: {}", authorityGroup.getName());
-
+        var authorityGroup = authorityRepository.findById(id)
+                .orElseThrow(IncorrectIdInputException::new);
         return modelMapper.map(authorityGroup, AuthorityIdDTO.class);
     }
 
     @Override
     public List<AuthorityListDTO> getAuthorities() {
-        log.info("Getting authorities");
         var authorities = authorityRepository.findAll();
-        log.info("Mapping authorities: {}", authorities.size());
         return authorities.stream()
                 .map(a -> modelMapper.map(a, AuthorityListDTO.class)).collect(Collectors.toList());
     }
@@ -57,7 +54,8 @@ public class AuthorityServiceImpl implements AuthoritiesService {
 
     @Override
     public void updateAuthority(AuthorityCommand command) {
-        var authority = authorityRepository.findById(command.getAuthorityId()).orElseThrow(() -> new IncorrectInputDataException("Error"));
+        var authority = authorityRepository.findById(command.getAuthorityId())
+                .orElseThrow(IncorrectIdInputException::new);
 
         checkIfCodeIsUnique(command.getWebInput().getCode());
 

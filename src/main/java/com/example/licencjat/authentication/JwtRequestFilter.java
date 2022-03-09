@@ -1,8 +1,7 @@
 package com.example.licencjat.authentication;
 
-import com.example.licencjat.authentication.models.ExpiredTokenException;
-import com.example.licencjat.exceptions.IncorrectIdInputException;
-import com.example.licencjat.user.UserRepository;
+import com.example.licencjat.exceptions.NotFoundExceptions.IncorrectIdInputException;
+import com.example.licencjat.userData.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -17,7 +16,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -45,7 +43,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         }
 
         if (id != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            var user = userRepository.findById(UUID.fromString(id)).orElseThrow(() -> new IncorrectIdInputException("Wrong id"));
+            var user = userRepository.findById(UUID.fromString(id)).orElseThrow(() -> new IncorrectIdInputException("There is no user with such id!"));
 
             var authorities = user.getUserGroups().stream()
                     .map(authorityGroup -> new SimpleGrantedAuthority(authorityGroup.getName()))

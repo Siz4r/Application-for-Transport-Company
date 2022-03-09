@@ -2,14 +2,17 @@ package com.example.licencjat.orders;
 
 import com.example.licencjat.UI.idGenerator.IdGenerator;
 import com.example.licencjat.client.ClientRepository;
-import com.example.licencjat.exceptions.IncorrectIdInputException;
-import com.example.licencjat.exceptions.NotEnoughResourceAmount;
-import com.example.licencjat.orders.models.OrderCommand;
-import com.example.licencjat.orders.models.OrderDto;
+import com.example.licencjat.client.models.ClientOrderDto;
+import com.example.licencjat.employee.employeeCRUD.models.EmployeeOrderDto;
+import com.example.licencjat.exceptions.NotFoundExceptions.IncorrectIdInputException;
+import com.example.licencjat.exceptions.IllegalArgumentExceptions.NotEnoughResourceAmount;
 import com.example.licencjat.orders.models.Order;
+import com.example.licencjat.orders.models.OrderCommand;
+import com.example.licencjat.orders.models.OrderDetailsDto;
 import com.example.licencjat.orders.models.OrderListDto;
 import com.example.licencjat.stuff.StuffRepository;
 import com.example.licencjat.stuff.models.Stuff;
+import com.example.licencjat.stuff.models.StuffOrderDto;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -30,9 +33,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void addOrder(OrderCommand command) {
         //Validate&&Get
-        var stuff = stuffRepository.findById(command.getStuffId()).orElseThrow(() -> new IncorrectIdInputException(""));
+        var stuff = stuffRepository.findById(command.getStuffId()).orElseThrow(IncorrectIdInputException::new);
         checkIfThereIsEnoughAmount(command, stuff);
-        var client = clientRepository.findById(command.getClientId()).orElseThrow(() -> new IncorrectIdInputException(""));
+        var client = clientRepository.findById(command.getClientId()).orElseThrow(IncorrectIdInputException::new);
 
         //Create
         var order = mapper.map(command.getWebInput(), Order.class);
@@ -47,7 +50,6 @@ public class OrderServiceImpl implements OrderService {
         //SetClient
         client.addOrder(order);
         clientRepository.save(client);
-
     }
 
     @Override
@@ -65,15 +67,24 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDto getOrderById(OrderCommand command) {
-        var order = orderRepository.findById(command.getOrderId()).orElseThrow(() -> new IncorrectIdInputException(""));
+    public OrderDetailsDto getOrderById(OrderCommand command) {
+        var order = orderRepository.findById(command.getOrderId()).orElseThrow(IncorrectIdInputException::new);
 
-        return mapper.map(order, OrderDto.class);
+        var employee = mapper.map(order.getEmployee(), EmployeeOrderDto.class);
+        var client = mapper.map(order.getClient(), ClientOrderDto.class);
+        var stuff = mapper.map(order.getStuff(), StuffOrderDto.class);
+
+        var orderDto = mapper.map(order, OrderDetailsDto.class);
+        orderDto.setClient(client);
+        orderDto.setEmployee(employee);
+        orderDto.setStuff(stuff);
+
+        return orderDto;
     }
 
     @Override
     public void markOrderAsDoen(OrderCommand command) {
-        var order = orderRepository.findById(command.getOrderId()).orElseThrow(() -> new IncorrectIdInputException(""));
+        var order = orderRepository.findById(command.getOrderId()).orElseThrow(IncorrectIdInputException::new);
 
         order.setDone(true);
 
@@ -82,7 +93,7 @@ public class OrderServiceImpl implements OrderService {
 
     private void checkIfThereIsEnoughAmount(OrderCommand command, Stuff stuff) {
         if (stuff.getQuantity() < command.getWebInput().getAmount()) {
-            throw new NotEnoughResourceAmount("");
+            throw new NotEnoughResourceAmount("There isn't enough " + stuff.getName() + ".");
         }
     }
 }

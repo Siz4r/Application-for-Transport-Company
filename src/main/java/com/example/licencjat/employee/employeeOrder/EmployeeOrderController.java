@@ -16,7 +16,7 @@ public class EmployeeOrderController {
     @ResponseStatus(value = HttpStatus.CREATED, reason = "Resource created successfully")
     public void assingEmployeeToOrder(@PathVariable("employeeId") UUID employeeId,
                                       @PathVariable("orderId") UUID orderId) {
-        service.assingEmployeeToOrder(employeeId, orderId);
+        service.assignEmployeeToOrder(employeeId, orderId);
     }
 
     @DeleteMapping

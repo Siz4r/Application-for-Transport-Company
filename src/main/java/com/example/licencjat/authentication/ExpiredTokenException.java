@@ -1,4 +1,4 @@
-package com.example.licencjat.authentication.models;
+package com.example.licencjat.authentication;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

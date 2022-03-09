@@ -1,7 +1,7 @@
 package com.example.licencjat.employee.employeeOrder;
 
 import com.example.licencjat.employee.employeeCRUD.EmployeeRepository;
-import com.example.licencjat.exceptions.IncorrectIdInputException;
+import com.example.licencjat.exceptions.NotFoundExceptions.IncorrectIdInputException;
 import com.example.licencjat.orders.OrderRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,9 +15,9 @@ public class EmployeeOrderServiceImpl implements EmployeeOrderService{
     private final OrderRepository orderRepository;
 
     @Override
-    public void assingEmployeeToOrder(UUID employeeId, UUID orderId) {
-        var employee = employeeRepository.findById(employeeId).orElseThrow(() -> new IncorrectIdInputException(""));
-        var order = orderRepository.findById(orderId).orElseThrow(() -> new IncorrectIdInputException(""));
+    public void assignEmployeeToOrder(UUID employeeId, UUID orderId) {
+        var employee = employeeRepository.findById(employeeId).orElseThrow(IncorrectIdInputException::new);
+        var order = orderRepository.findById(orderId).orElseThrow(IncorrectIdInputException::new);
         employee.addOrder(order);
 
         employeeRepository.save(employee);
@@ -25,8 +25,8 @@ public class EmployeeOrderServiceImpl implements EmployeeOrderService{
 
     @Override
     public void assignBackEmployeeFromOrder(UUID employeeId, UUID orderId) {
-        var employee = employeeRepository.findById(employeeId).orElseThrow(() -> new IncorrectIdInputException(""));
-        var order = orderRepository.findById(orderId).orElseThrow(() -> new IncorrectIdInputException(""));
+        var employee = employeeRepository.findById(employeeId).orElseThrow(IncorrectIdInputException::new);
+        var order = orderRepository.findById(orderId).orElseThrow(IncorrectIdInputException::new);
 
         employee.deleteOrder(order);
 

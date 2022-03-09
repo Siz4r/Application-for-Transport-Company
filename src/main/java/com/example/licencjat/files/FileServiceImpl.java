@@ -3,12 +3,13 @@ package com.example.licencjat.files;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.example.licencjat.UI.idGenerator.IdGenerator;
-import com.example.licencjat.exceptions.IncorrectIdInputException;
+import com.example.licencjat.exceptions.NotFoundExceptions.CloudinaryException;
+import com.example.licencjat.exceptions.NotFoundExceptions.IncorrectIdInputException;
 import com.example.licencjat.files.models.File;
 import com.example.licencjat.files.models.FileDto;
 import com.example.licencjat.files.models.FileListDto;
 import com.example.licencjat.files.models.FileUploadCommand;
-import com.example.licencjat.user.UserRepository;
+import com.example.licencjat.userData.UserRepository;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,6 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -34,30 +34,35 @@ public class FileServiceImpl implements FileService{
             "api_secret", "XOw2VK3j0A75TEGbZf1Z8ABjK4k"));
 
     @Override
-    public void updateAnImage(FileUploadCommand command) throws IOException {
-        var user = userRepository.findById(command.getUserId()).orElseThrow(() -> new IncorrectIdInputException(""));
+    public void updateAnImage(FileUploadCommand command) {
+        var user = userRepository.findById(command.getUserId()).orElseThrow(IncorrectIdInputException::new);
 
         var options = ObjectUtils.asMap("resource_type", "auto",
         "format", "pdf");
 
-        Map result = cloudinary.uploader().upload(command.getBytes(), options);
+        try {
+            var result = cloudinary.uploader().upload(command.getBytes(), options);
 
-        var date = LocalDateTime.now();
-
-        user.addFile(File.builder()
+            user.addFile(File.builder()
                 .fileId(UUID.fromString(idGenerator.generateId()))
                 .cloudinaryId(result.get("public_id").toString())
-                .createdAt(date)
+                .createdAt(LocalDateTime.now())
                 .fileUrl((String) result.get("secure_url"))
                 .name(command.getName())
                 .sendToId(command.getSendToId()).build());
+
+        } catch (IOException e) {
+            throw new CloudinaryException(e.getMessage());
+        }
+
+
 
         userRepository.save(user);
     }
 
     @Override
     public void deleteAnImage(UUID id) throws Exception {
-        var file = fileRepository.findById(id).orElseThrow(() -> new IncorrectIdInputException(""));
+        var file = fileRepository.findById(id).orElseThrow(IncorrectIdInputException::new);
 
         cloudinary.api().deleteResources(Collections.singletonList(file.getCloudinaryId()), ObjectUtils.emptyMap());
 
@@ -75,7 +80,7 @@ public class FileServiceImpl implements FileService{
 
     @Override
     public FileDto getFileById(UUID id) {
-        var file = fileRepository.findById(id).orElseThrow(() -> new IncorrectIdInputException(""));
+        var file = fileRepository.findById(id).orElseThrow(IncorrectIdInputException::new);
 
         return mapper.map(file, FileDto.class);
     }

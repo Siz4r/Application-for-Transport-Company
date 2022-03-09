@@ -1,13 +1,9 @@
 package com.example.licencjat.orders;
 
 import com.example.licencjat.orders.models.OrderCommand;
-import com.example.licencjat.orders.models.OrderDto;
+import com.example.licencjat.orders.models.OrderDetailsDto;
 import com.example.licencjat.orders.models.OrderListDto;
 import com.example.licencjat.orders.models.OrderWebInput;
-import com.example.licencjat.stuff.models.StuffDto;
-import com.example.licencjat.stuff.models.StuffListDto;
-import com.example.licencjat.stuff.models.StuffServiceCommand;
-import com.example.licencjat.stuff.models.StuffUpdateCommand;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +37,7 @@ public class OrderController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public OrderDto getOrderById(@PathVariable("id") UUID id) {
+    public OrderDetailsDto getOrderById(@PathVariable("id") UUID id) {
         return orderService.getOrderById(OrderCommand.builder().orderId(id).build());
     }
 

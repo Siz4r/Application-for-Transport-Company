@@ -5,7 +5,7 @@ import com.example.licencjat.company.models.Company;
 import com.example.licencjat.company.models.CompanyDto;
 import com.example.licencjat.company.models.CompanyListDto;
 import com.example.licencjat.company.models.CompanyServiceCommand;
-import com.example.licencjat.exceptions.IncorrectIdInputException;
+import com.example.licencjat.exceptions.NotFoundExceptions.IncorrectIdInputException;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ public class CompanyServiceImpl implements CompanyService{
 
     @Override
     public CompanyDto getCompanyById(CompanyServiceCommand command) {
-        var company = repository.findById(command.getId()).orElseThrow(() -> new IncorrectIdInputException(""));
+        var company = repository.findById(command.getId()).orElseThrow(IncorrectIdInputException::new);
 
         return mapper.map(company, CompanyDto.class);
     }

@@ -3,7 +3,7 @@ package com.example.licencjat.employee.employeeCRUD;
 import com.example.licencjat.employee.employeeCRUD.models.EmployeeDto;
 import com.example.licencjat.employee.employeeCRUD.models.EmployeeListDto;
 import com.example.licencjat.employee.employeeCRUD.models.EmployeeServiceCommand;
-import com.example.licencjat.user.models.UserWebInput;
+import com.example.licencjat.userData.models.UserWebInput;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

@@ -1,10 +1,8 @@
 package com.example.licencjat.authentication;
 
-import com.example.licencjat.authentication.models.ExpiredTokenException;
-import com.example.licencjat.exceptions.ForbiddenException;
-import com.example.licencjat.exceptions.IncorrectIdInputException;
-import com.example.licencjat.exceptions.IncorrectInputDataException;
-import com.example.licencjat.user.UserRepository;
+import com.example.licencjat.exceptions.NotFoundExceptions.IncorrectIdInputException;
+import com.example.licencjat.exceptions.IllegalArgumentExceptions.IncorrectInputDataException;
+import com.example.licencjat.userData.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -12,14 +10,13 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.function.Function;
 
 @Service
 @AllArgsConstructor
 public class JwtUtil {
-    private final String SECRET_KEY = "dupa";
+    private final String SECRET_KEY = "KOWADLO";
     private final UserRepository userRepository;
 
     public String extractId(String token) {
@@ -36,7 +33,12 @@ public class JwtUtil {
     }
 
     private Claims extractAllClaims(String token) {
+        try {
         return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
+
+        } catch (Exception e) {
+            throw new ExpiredTokenException(e.getMessage());
+        }
     }
 
     public boolean isTokenExpired(String token) {
@@ -63,23 +65,5 @@ public class JwtUtil {
             throw new IncorrectInputDataException("Wrong email! expected: " + email + " acquired " + userDetails.getUsername());
         }
         return true;
-    }
-
-    public UUID getIdFromRequest(HttpServletRequest request) throws Exception {
-        String token;
-        var header = request.getHeader("Authorization");
-
-        if (Objects.isNull(header)) {
-            throw new ForbiddenException();
-        }
-
-        if (header.startsWith("Bearer ")) {
-            token = header.substring(7);
-        } else {
-            throw new Exception("Where is token?");
-        }
-
-
-        return UUID.fromString(extractId(token));
     }
 }

@@ -1,6 +1,6 @@
 package com.example.licencjat.email;
 
-import com.example.licencjat.exceptions.WrongEmailException;
+import com.example.licencjat.exceptions.IllegalArgumentExceptions.WrongEmailException;
 
 public class EmailSenderValidator {
     public void validateEmail(String email) {

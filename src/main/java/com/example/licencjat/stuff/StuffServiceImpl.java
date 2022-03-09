@@ -2,7 +2,7 @@ package com.example.licencjat.stuff;
 
 import com.example.licencjat.UI.idGenerator.IdGenerator;
 import com.example.licencjat.company.CompanyRepository;
-import com.example.licencjat.exceptions.IncorrectIdInputException;
+import com.example.licencjat.exceptions.NotFoundExceptions.IncorrectIdInputException;
 import com.example.licencjat.stuff.models.*;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -22,7 +22,7 @@ public class StuffServiceImpl implements StuffService{
 
     @Override
     public void addStuff(StuffServiceCommand command) {
-        var company = companyRepository.findById(command.getWebInput().getCompanyId()).orElseThrow(() -> new IncorrectIdInputException(""));
+        var company = companyRepository.findById(command.getWebInput().getCompanyId()).orElseThrow(IncorrectIdInputException::new);
 
         var stuff = mapper.map(command.getWebInput(), Stuff.class);
 
@@ -35,7 +35,7 @@ public class StuffServiceImpl implements StuffService{
 
     @Override
     public void editStuff(StuffServiceCommand command) {
-        var stuff = stuffRepository.findById(command.getId()).orElseThrow(() -> new IncorrectIdInputException("Error"));
+        var stuff = stuffRepository.findById(command.getId()).orElseThrow(IncorrectIdInputException::new);
 
         stuff.setName(command.getUpdateCommand().getName());
         stuff.setPrize(command.getUpdateCommand().getPrize());
@@ -52,7 +52,7 @@ public class StuffServiceImpl implements StuffService{
 
     @Override
     public StuffDto getStuffById(UUID id) {
-        var stuff = stuffRepository.findById(id).orElseThrow(() -> new IncorrectIdInputException("Error"));
+        var stuff = stuffRepository.findById(id).orElseThrow(IncorrectIdInputException::new);
         return mapper.map(stuff, StuffDto.class);
     }
 

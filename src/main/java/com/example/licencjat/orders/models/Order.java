@@ -9,6 +9,9 @@ import lombok.*;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import java.sql.Date;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Builder
@@ -34,5 +37,6 @@ public class Order {
     private Stuff stuff;
 
     private int amount;
+    private Timestamp date = new Timestamp(System.currentTimeMillis());
     private boolean isDone;
 }

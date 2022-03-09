@@ -35,7 +35,7 @@ public class AuthoritiesController {
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    @ResponseStatus(value = HttpStatus.NO_CONTENT, reason = "Resource deleted successfully")
     public void deleteAuthority(@PathVariable("id") UUID id) {
         authoritiesService.deleteAuthority(AuthorityCommand.builder()
                 .authorityId(id).build());

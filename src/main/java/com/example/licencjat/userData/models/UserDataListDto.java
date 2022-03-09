@@ -1,4 +1,4 @@
-package com.example.licencjat.user.models;
+package com.example.licencjat.userData.models;
 
 import com.example.licencjat.files.models.File;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Getter
 @Setter
-public class UserListDto {
+public class UserDataListDto {
     private UUID id;
     private String firstName;
     private String lastName;

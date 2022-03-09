@@ -1,7 +1,7 @@
 package com.example.licencjat.employee.employeeCRUD.models;
 
 import com.example.licencjat.orders.models.Order;
-import com.example.licencjat.user.models.User;
+import com.example.licencjat.userData.models.User;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 

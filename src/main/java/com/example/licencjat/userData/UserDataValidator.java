@@ -1,11 +1,11 @@
-package com.example.licencjat.user;
+package com.example.licencjat.userData;
 
 import com.example.licencjat.email.EmailSenderValidator;
-import com.example.licencjat.exceptions.IncorrectInputDataException;
-import com.example.licencjat.exceptions.IncorrectPhoneNumberException;
-import com.example.licencjat.exceptions.WrongEmailException;
-import com.example.licencjat.user.models.UserUpdateInput;
-import com.example.licencjat.user.models.UserWebInput;
+import com.example.licencjat.exceptions.IllegalArgumentExceptions.IncorrectInputDataException;
+import com.example.licencjat.exceptions.IllegalArgumentExceptions.IncorrectPhoneNumberException;
+import com.example.licencjat.exceptions.IllegalArgumentExceptions.WrongEmailException;
+import com.example.licencjat.userData.models.UserUpdateInput;
+import com.example.licencjat.userData.models.UserWebInput;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import lombok.AllArgsConstructor;
 

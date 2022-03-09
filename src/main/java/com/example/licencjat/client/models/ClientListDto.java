@@ -9,7 +9,6 @@ import java.util.UUID;
 @Setter
 public class ClientListDto {
     private UUID clientId;
-    private UUID userId;
     private String userFirstName;
     private String userLastName;
 }

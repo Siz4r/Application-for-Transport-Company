@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/stuffs/")
+@RequestMapping("/api/stuffs")
 public class StuffController {
     private final StuffService stuffService;
 
@@ -25,13 +25,13 @@ public class StuffController {
 
     @GetMapping
     @ResponseStatus(value = HttpStatus.OK)
-    public List<StuffListDto> getStuffs() {
+    public List<StuffListDto> getStuff() {
         return stuffService.getStuffs();
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public StuffDto getStuffById(@PathVariable("id") UUID id) {
+    public StuffDto getStuff(@PathVariable("id") UUID id) {
         return stuffService.getStuffById(id);
     }
 

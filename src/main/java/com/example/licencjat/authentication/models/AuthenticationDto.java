@@ -1,11 +1,11 @@
 package com.example.licencjat.authentication.models;
 
-import com.example.licencjat.user.models.UserDto;
+import com.example.licencjat.userData.models.UserDataDto;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
 @Getter
 public class AuthenticationDto extends PublicTokenDto{
-    private final UserDto user;
+    private final UserDataDto user;
 }

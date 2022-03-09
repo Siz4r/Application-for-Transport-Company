@@ -1,4 +1,4 @@
-package com.example.licencjat.user.models;
+package com.example.licencjat.userData.models;
 
 import com.example.licencjat.authorities.models.AuthorityGroup;
 import com.example.licencjat.files.models.File;

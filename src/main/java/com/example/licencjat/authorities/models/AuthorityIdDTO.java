@@ -1,6 +1,6 @@
 package com.example.licencjat.authorities.models;
 
-import com.example.licencjat.user.models.UserListDto;
+import com.example.licencjat.userData.models.UserDataListDto;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -13,5 +13,5 @@ import java.util.Set;
 public class AuthorityIdDTO {
     private String code;
     private String name;
-    private Set<UserListDto> users;
+    private Set<UserDataListDto> users;
 }

@@ -1,6 +1,6 @@
 package com.example.licencjat.authorities.models;
 
-import com.example.licencjat.user.models.User;
+import com.example.licencjat.userData.models.User;
 import lombok.*;
 
 import javax.persistence.*;
@@ -22,5 +22,5 @@ public class AuthorityGroup {
     private String name;
 
     @ManyToMany(mappedBy = "userGroups")
-    private List<User> users;
+    private List<User> userData;
 }
