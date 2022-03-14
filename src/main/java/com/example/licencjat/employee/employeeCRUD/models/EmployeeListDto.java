@@ -8,7 +8,7 @@ import java.util.UUID;
 @Getter
 @Setter
 public class EmployeeListDto {
-    private UUID employeeId;
+    private UUID id;
     private String userFirstName;
     private String userLastName;
     private Boolean isAvailable;

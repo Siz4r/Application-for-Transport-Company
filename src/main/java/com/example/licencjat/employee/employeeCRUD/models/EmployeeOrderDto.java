@@ -1,5 +1,6 @@
 package com.example.licencjat.employee.employeeCRUD.models;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,4 +13,11 @@ public class EmployeeOrderDto {
     private String userFirstName;
     private String userLastName;
     private String userPhoneNumber;
+
+    public EmployeeOrderDto() {
+        employeeId = UUID.randomUUID();
+        userFirstName = "";
+        userLastName = "";
+        userPhoneNumber = "";
+    }
 }

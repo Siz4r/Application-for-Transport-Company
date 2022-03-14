@@ -12,4 +12,5 @@ interface OrderService {
     List<OrderListDto> getOrders();
     OrderDetailsDto getOrderById(OrderCommand command);
     void markOrderAsDoen(OrderCommand command);
+    void updateOrderQuantity(OrderCommand command);
 }

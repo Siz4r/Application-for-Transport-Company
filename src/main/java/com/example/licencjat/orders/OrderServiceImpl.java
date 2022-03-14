@@ -69,8 +69,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDetailsDto getOrderById(OrderCommand command) {
         var order = orderRepository.findById(command.getOrderId()).orElseThrow(IncorrectIdInputException::new);
+        EmployeeOrderDto employee = new EmployeeOrderDto();
+        if (order.getEmployee() != null) {
+            employee = mapper.map(order.getEmployee(), EmployeeOrderDto.class);
+        }
 
-        var employee = mapper.map(order.getEmployee(), EmployeeOrderDto.class);
         var client = mapper.map(order.getClient(), ClientOrderDto.class);
         var stuff = mapper.map(order.getStuff(), StuffOrderDto.class);
 
@@ -88,6 +91,13 @@ public class OrderServiceImpl implements OrderService {
 
         order.setDone(true);
 
+        orderRepository.save(order);
+    }
+
+    @Override
+    public void updateOrderQuantity(OrderCommand command) {
+        var order = orderRepository.findById(command.getOrderId()).orElseThrow(IncorrectIdInputException::new);
+        order.setAmount(command.getWebInput().getAmount());
         orderRepository.save(order);
     }
 

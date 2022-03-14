@@ -9,6 +9,7 @@ import java.util.Set;
 @Getter
 @Setter
 public class EmployeeDto {
+    private String id;
     private String userFirstName;
     private String userLastName;
     private String userEmail;

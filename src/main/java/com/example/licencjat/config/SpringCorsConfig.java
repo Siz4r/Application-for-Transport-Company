@@ -12,11 +12,11 @@ public class SpringCorsConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/api/auth/**").allowCredentials(true).allowedOrigins("http://localhost:3000", "http://localhost:3001");
-                registry.addMapping("/api/user/**").allowCredentials(true).allowedOrigins("http://localhost:3000", "http://localhost:3001").allowedMethods("GET", "POST", "PUT");
-                registry.addMapping("/api/employees/**").allowCredentials(true).allowedOrigins("http://localhost:3000", "http://localhost:3001").allowedMethods("GET", "POST");
-                registry.addMapping("/api/clients/**").allowCredentials(true).allowedOrigins("http://localhost:3000", "http://localhost:3001").allowedMethods("GET", "POST");
-                registry.addMapping("/api/orders/**").allowCredentials(true).allowedOrigins("http://localhost:3000", "http://localhost:3001").allowedMethods("GET", "POST");
+                registry.addMapping("/api/auth/**").allowCredentials(true).allowedOrigins("http://localhost:7692", "http://localhost:3001");
+                registry.addMapping("/api/user/**").allowCredentials(true).allowedOrigins("http://localhost:7692", "http://localhost:3001").allowedMethods("GET", "POST", "PUT");
+                registry.addMapping("/api/employees/**").allowCredentials(true).allowedOrigins("http://localhost:7692", "http://localhost:3001").allowedMethods("GET", "POST", "DELETE");
+                registry.addMapping("/api/clients/**").allowCredentials(true).allowedOrigins("http://localhost:7692", "http://localhost:3001").allowedMethods("GET", "POST", "DELETE");
+                registry.addMapping("/api/orders/**").allowCredentials(true).allowedOrigins("http://localhost:7692", "http://localhost:3001").allowedMethods("GET", "POST", "PATCH", "PUT");
             }
         };
     }

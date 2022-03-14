@@ -48,8 +48,14 @@ public class OrderController {
     }
 
     @PutMapping("{id}")
-    @ResponseStatus(value = HttpStatus.ACCEPTED, reason = "Resource deleted successfully")
+    @ResponseStatus(value = HttpStatus.ACCEPTED, reason = "Employee assigned succesfully")
     public void markOrderAsDone(@PathVariable("id") UUID id) {
         orderService.markOrderAsDoen(OrderCommand.builder().orderId(id).build());
+    }
+
+    @PatchMapping("{id}")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT, reason = "Resource updated successfully")
+    public void updateOrderQuantity(@PathVariable("id") UUID id, @RequestBody OrderWebInput webInput) {
+        orderService.updateOrderQuantity(OrderCommand.builder().orderId(id).webInput(webInput).build());
     }
 }
