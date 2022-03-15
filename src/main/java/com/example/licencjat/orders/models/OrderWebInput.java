@@ -8,6 +8,6 @@ import javax.validation.constraints.NotNull;
 @Getter
 public class OrderWebInput {
     @NotNull
-    @Range(min = 0, max = 100)
+    @Range(min = 1, max = 100)
     private int amount;
 }

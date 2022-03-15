@@ -11,5 +11,6 @@ public class EmployeeListDto {
     private UUID id;
     private String userFirstName;
     private String userLastName;
+    private String userPhoneNumber;
     private Boolean isAvailable;
 }

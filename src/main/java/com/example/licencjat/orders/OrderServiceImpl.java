@@ -86,10 +86,10 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void markOrderAsDoen(OrderCommand command) {
+    public void changeOrderState(OrderCommand command) {
         var order = orderRepository.findById(command.getOrderId()).orElseThrow(IncorrectIdInputException::new);
 
-        order.setDone(true);
+        order.setDone(!order.isDone());
 
         orderRepository.save(order);
     }
