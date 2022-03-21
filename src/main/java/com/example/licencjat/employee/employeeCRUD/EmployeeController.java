@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,7 +32,7 @@ public class EmployeeController {
 
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED, reason = "Resource created successfully")
-    public void createAnEmployee(@RequestBody UserWebInput webInput) {
+    public void createAnEmployee(@RequestBody @Valid UserWebInput webInput) {
         service.addAnEmployee(EmployeeServiceCommand.builder().webInput(webInput).build());
     }
 

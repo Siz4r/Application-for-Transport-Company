@@ -21,26 +21,27 @@ public class StuffServiceImpl implements StuffService{
     private final CompanyRepository companyRepository;
 
     @Override
-    public void addStuff(StuffServiceCommand command) {
+    public UUID addStuff(StuffServiceCommand command) {
         var company = companyRepository.findById(command.getWebInput().getCompanyId()).orElseThrow(IncorrectIdInputException::new);
 
         var stuff = mapper.map(command.getWebInput(), Stuff.class);
 
-        stuff.setId(UUID.fromString(idGenerator.generateId()));
+        var id = UUID.fromString(idGenerator.generateId());
+        stuff.setId(id);
 
         company.addStuff(stuff);
 
         companyRepository.save(company);
+
+        return id;
     }
 
     @Override
     public void editStuff(StuffServiceCommand command) {
         var stuff = stuffRepository.findById(command.getId()).orElseThrow(IncorrectIdInputException::new);
 
-        stuff.setName(command.getUpdateCommand().getName());
         stuff.setPrize(command.getUpdateCommand().getPrize());
         stuff.setQuantity(command.getUpdateCommand().getQuantity());
-        stuff.setDescription(command.getUpdateCommand().getDescription());
 
         stuffRepository.save(stuff);
     }

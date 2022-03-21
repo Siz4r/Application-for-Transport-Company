@@ -10,4 +10,8 @@ import java.util.UUID;
 public class CompanyListDto {
     private UUID id;
     private String name;
+    private String city;
+    private String street;
+    private String postalCode;
+    private Integer buildingNumber;
 }

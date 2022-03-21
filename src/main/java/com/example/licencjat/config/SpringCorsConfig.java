@@ -17,6 +17,8 @@ public class SpringCorsConfig {
                 registry.addMapping("/api/employees/**").allowCredentials(true).allowedOrigins("http://localhost:7692", "http://localhost:3000").allowedMethods("GET", "POST", "DELETE");
                 registry.addMapping("/api/clients/**").allowCredentials(true).allowedOrigins("http://localhost:7692", "http://localhost:3000").allowedMethods("GET", "POST", "DELETE");
                 registry.addMapping("/api/orders/**").allowCredentials(true).allowedOrigins("http://localhost:7692", "http://localhost:3000").allowedMethods("GET", "POST", "PATCH", "PUT");
+                registry.addMapping("/api/companies/**").allowCredentials(true).allowedOrigins("http://localhost:7692", "http://localhost:3000").allowedMethods("GET", "POST", "PATCH", "PUT", "DELETE");
+                registry.addMapping("/api/stuffs/**").allowCredentials(true).allowedOrigins("http://localhost:7692", "http://localhost:3000").allowedMethods("GET", "POST", "PATCH", "PUT", "DELETE");
             }
         };
     }

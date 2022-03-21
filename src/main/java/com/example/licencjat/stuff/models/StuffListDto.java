@@ -10,4 +10,7 @@ import java.util.UUID;
 public class StuffListDto {
     private UUID id;
     private String name;
+    private String description;
+    private Integer quantity;
+    private Integer prize;
 }
