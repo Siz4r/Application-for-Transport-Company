@@ -1,8 +1,10 @@
 package com.example.licencjat.userData.models;
 
+import com.example.licencjat.authorities.models.AuthorityIdDTO;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
 import java.util.UUID;
 
 @Setter

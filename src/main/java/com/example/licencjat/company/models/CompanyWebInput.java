@@ -10,7 +10,6 @@ import javax.validation.constraints.NotNull;
 public class CompanyWebInput {
     @NotBlank
     private String name;
-
     @NotBlank
     private String city;
     @NotBlank

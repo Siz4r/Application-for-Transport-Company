@@ -16,6 +16,4 @@ public class UserWebInput {
     private final String email;
     @NotBlank
     private final String phoneNumber;
-    @NotBlank
-    private final String password;
 }

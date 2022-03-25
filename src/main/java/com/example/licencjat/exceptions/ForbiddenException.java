@@ -1,2 +1,9 @@
-package com.example.licencjat.exceptions;public class ForbiddenException {
+package com.example.licencjat.exceptions;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ResponseStatus(HttpStatus.FORBIDDEN)
+public class ForbiddenException extends RuntimeException {
+    public ForbiddenException() { super("Access denied");}
 }

@@ -1,6 +1,7 @@
 package com.example.licencjat.employee.employeeCRUD;
 
 import com.example.licencjat.UI.idGenerator.IdGenerator;
+import com.example.licencjat.authorities.models.ROLES;
 import com.example.licencjat.employee.employeeCRUD.models.Employee;
 import com.example.licencjat.employee.employeeCRUD.models.EmployeeDto;
 import com.example.licencjat.employee.employeeCRUD.models.EmployeeListDto;
@@ -55,12 +56,25 @@ public class EmployeeServiceImpl implements EmployeeService{
     }
 
     @Override
-    public void addAnEmployee(EmployeeServiceCommand command) {
-        var user = userService.addUser(UserServiceCommand.builder().webInput(command.getWebInput()).build());
+    public UUID addAnEmployee(EmployeeServiceCommand command) {
+        var user = userService.addUser(UserServiceCommand.builder().webInput(command.getWebInput()).build(), ROLES.EMPLOYEE);
 
         var id = UUID.fromString(idGenerator.generateId());
 
         employeeRepository.save(Employee.builder().id(id).user(user).build());
+
+        return id;
+    }
+
+    @Override
+    public UUID addAnAdmin(EmployeeServiceCommand command) {
+        var user = userService.addUser(UserServiceCommand.builder().webInput(command.getWebInput()).build(), ROLES.ADMIN);
+
+        var id = UUID.fromString(idGenerator.generateId());
+
+        employeeRepository.save(Employee.builder().id(id).user(user).build());
+
+        return id;
     }
 
     @Override

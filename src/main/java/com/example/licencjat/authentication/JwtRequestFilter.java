@@ -15,6 +15,7 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -26,6 +27,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private final UserRepository userRepository;
 
     @Override
+    @Transactional
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
 
         final String authorizationHeader = httpServletRequest.getHeader("Authorization");
@@ -46,7 +48,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             var user = userRepository.findById(UUID.fromString(id)).orElseThrow(() -> new IncorrectIdInputException("There is no user with such id!"));
 
             var authorities = user.getUserGroups().stream()
-                    .map(authorityGroup -> new SimpleGrantedAuthority(authorityGroup.getName()))
+                    .map(authorityGroup -> new SimpleGrantedAuthority(authorityGroup.getCode()))
                     .collect(Collectors.toList());
 
             var userDetails = new User(user.getEmail(), user.getPassword(), authorities);

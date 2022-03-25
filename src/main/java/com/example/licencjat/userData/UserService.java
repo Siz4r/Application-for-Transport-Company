@@ -1,5 +1,6 @@
 package com.example.licencjat.userData;
 
+import com.example.licencjat.authorities.models.ROLES;
 import com.example.licencjat.userData.models.User;
 import com.example.licencjat.userData.models.UserDataDto;
 import com.example.licencjat.userData.models.UserDataListDto;
@@ -11,7 +12,8 @@ import java.util.List;
 import java.util.UUID;
 
 public interface UserService extends UserDetailsService {
-    User addUser(UserServiceCommand command);
+    User addUser(UserServiceCommand command, ROLES role);
+
     UserDataDto getUserById(UUID id);
     UserDataDto getUserByEmail(String email);
     String getEmail(UUID id);

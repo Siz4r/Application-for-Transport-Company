@@ -1,6 +1,10 @@
 package com.example.licencjat.userData;
 
+import com.example.licencjat.UI.PasswordService;
 import com.example.licencjat.UI.idGenerator.IdGenerator;
+import com.example.licencjat.authorities.AuthorityRepository;
+import com.example.licencjat.authorities.models.AuthorityGroup;
+import com.example.licencjat.authorities.models.ROLES;
 import com.example.licencjat.email.EmailSenderServiceImpl;
 import com.example.licencjat.exceptions.NotFoundExceptions.IncorrectIdInputException;
 import com.example.licencjat.exceptions.IllegalArgumentExceptions.IncorrectInputDataException;
@@ -16,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -24,16 +29,19 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
+    private final PasswordService passwordService;
     private final UserRepository userRepository;
+    private final AuthorityRepository authorityRepository;
     private final IdGenerator idGenerator;
     private final EmailSenderServiceImpl emailSenderService;
     private final ModelMapper mapper;
 
     @Override
-    public User addUser(UserServiceCommand command) {
+    public User addUser(UserServiceCommand command, ROLES role) {
         new UserDataValidator(userRepository).validateUserWebInput(command.getWebInput(), command.getId());
 
-        var password = passwordEncoder.encode(command.getWebInput().getPassword());
+        var password = passwordService.alphaNumericString(20);
+        var encodedPassword = passwordEncoder.encode(password);
 
         var id = idGenerator.generateId();
 
@@ -42,16 +50,30 @@ public class UserServiceImpl implements UserService {
                 .firstName(command.getWebInput().getFirstName())
                 .lastName(command.getWebInput().getLastName())
                 .phoneNumber(command.getWebInput().getPhoneNumber())
-                .password(password)
+                .password(encodedPassword)
                 .buildingNumber(0)
                 .city("")
                 .postalCode("")
                 .street("")
                 .id(UUID.fromString(id)).build();
 
+        var authorityGroup = switch (role) {
+            case ADMIN -> authorityRepository.findByCode("A00").orElseThrow(IncorrectIdInputException::new);
+            case EMPLOYEE -> authorityRepository.findByCode("E00").orElseThrow(IncorrectIdInputException::new);
+            case CLIENT -> authorityRepository.findByCode("C00").orElseThrow(IncorrectIdInputException::new);
+        };
+
+        var authorities = List.of(authorityGroup);
+        user.setUserGroups(authorities);
+
         userRepository.save(user);
 
-        emailSenderService.sendEmail(command.getWebInput().getEmail());
+        var message = "Hi!\n" +
+                "You have been registered on Trans-Mat page. We are pleased that you want to work with us!\n" +
+                "This is your password: " + password +
+                "\n Have a nice day!";
+
+        emailSenderService.sendEmail(command.getWebInput().getEmail(), "Trans-Mat Registration", message);
 
         return user;
     }

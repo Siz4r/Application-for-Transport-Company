@@ -10,6 +10,6 @@ import java.util.UUID;
 
 @Repository
 public interface AuthorityRepository extends JpaRepository<AuthorityGroup, UUID> {
-    @PreAuthorize("hasAnyAuthority('PROJECTS_NAMES', 'PROJECTS_CRE-DEL', 'USERS_CRUD')")
+    @PreAuthorize("hasAnyAuthority('A00')")
     Optional<AuthorityGroup> findByCode(String code);
 }

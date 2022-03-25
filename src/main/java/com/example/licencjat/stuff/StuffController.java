@@ -1,5 +1,7 @@
 package com.example.licencjat.stuff;
 
+import com.example.licencjat.UI.Annotations.PreAuthorizeAdmin;
+import com.example.licencjat.UI.Annotations.PreAuthorizeAdminAndClient;
 import com.example.licencjat.stuff.models.*;
 
 import lombok.AllArgsConstructor;
@@ -18,6 +20,7 @@ public class StuffController {
     private final StuffService stuffService;
 
     @PostMapping
+    @PreAuthorizeAdmin
     public ResponseEntity<String> addStuff(@Valid @RequestBody StuffWebInput webInput) {
         return new ResponseEntity<String>(
                 stuffService.addStuff(StuffServiceCommand.builder().webInput(webInput).build()).toString(),
@@ -26,18 +29,14 @@ public class StuffController {
 
     @GetMapping
     @ResponseStatus(value = HttpStatus.OK)
+    @PreAuthorizeAdminAndClient
     public List<StuffListDto> getStuff() {
         return stuffService.getStuffs();
     }
 
-    @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public StuffDto getStuff(@PathVariable("id") UUID id) {
-        return stuffService.getStuffById(id);
-    }
-
     @PutMapping("{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT, reason = "Resource updated successfully")
+    @PreAuthorizeAdmin
     public void updateAStuff(@PathVariable("id") UUID id, @Valid @RequestBody StuffUpdateCommand updateCommand) {
         stuffService.editStuff(StuffServiceCommand.builder()
                 .updateCommand(updateCommand)
@@ -46,6 +45,7 @@ public class StuffController {
 
     @DeleteMapping("{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT, reason = "Resource deleted successfully")
+    @PreAuthorizeAdmin
     public void deleteStuff(@PathVariable("id") UUID id) {
         stuffService.deleteStuff(id);
     }

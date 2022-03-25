@@ -1,2 +1,7 @@
-package com.example.licencjat.security;public interface AuthenticationFacade {
+package com.example.licencjat.security;
+
+import com.example.licencjat.userData.models.UserDataDto;
+
+public interface AuthenticationFacade {
+    UserDataDto getCurrentAuthenticatedUser();
 }

@@ -1,11 +1,14 @@
 package com.example.licencjat.client;
 
 import com.example.licencjat.UI.idGenerator.IdGenerator;
+import com.example.licencjat.authorities.models.ROLES;
 import com.example.licencjat.client.models.Client;
 import com.example.licencjat.client.models.ClientCommand;
 import com.example.licencjat.client.models.ClientDto;
 import com.example.licencjat.client.models.ClientListDto;
+import com.example.licencjat.exceptions.ForbiddenException;
 import com.example.licencjat.exceptions.NotFoundExceptions.IncorrectIdInputException;
+import com.example.licencjat.security.AuthenticationFacade;
 import com.example.licencjat.userData.UserServiceImpl;
 import com.example.licencjat.userData.models.UserServiceCommand;
 import lombok.AllArgsConstructor;
@@ -22,15 +25,18 @@ public class ClientServiceImpl implements ClientService{
     private final ClientRepository clientRepository;
     private final ModelMapper mapper;
     private final IdGenerator idGenerator;
+    private final AuthenticationFacade authenticationFacade;
     private final UserServiceImpl userService;
 
     @Override
-    public void addClient(ClientCommand command) {
-        var user = userService.addUser(UserServiceCommand.builder().webInput(command.getWebInput()).build());
+    public UUID addClient(ClientCommand command) {
+        var user = userService.addUser(UserServiceCommand.builder().webInput(command.getWebInput()).build(), ROLES.CLIENT);
 
         var id = UUID.fromString(idGenerator.generateId());
 
         clientRepository.save(Client.builder().id(id).user(user).build());
+
+        return id;
     }
 
     @Override
@@ -42,6 +48,12 @@ public class ClientServiceImpl implements ClientService{
     public ClientDto getClientById(ClientCommand command) {
         var client = clientRepository.findById(command.getId()).orElseThrow(() -> new IncorrectIdInputException(""));
 
+        var id = authenticationFacade.getCurrentAuthenticatedUser().getId();
+
+        if (!id.equals(client.getUser().getId())) {
+            throw new ForbiddenException();
+        }
+
         return mapper.map(client, ClientDto.class);
     }
 
@@ -49,7 +61,10 @@ public class ClientServiceImpl implements ClientService{
     public List<ClientListDto> getClients() {
         var clients = clientRepository.findAll();
 
+        var id = authenticationFacade.getCurrentAuthenticatedUser().getId();
+
         return clients.stream()
+                .filter(c -> c.getUser().getId().equals(id))
                 .map(c -> mapper.map(c, ClientListDto.class))
                 .collect(Collectors.toList());
     }

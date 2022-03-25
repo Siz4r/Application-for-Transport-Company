@@ -2,6 +2,7 @@ package com.example.licencjat.orders;
 
 import com.example.licencjat.UI.idGenerator.IdGenerator;
 import com.example.licencjat.client.ClientRepository;
+import com.example.licencjat.client.models.Client;
 import com.example.licencjat.client.models.ClientOrderDto;
 import com.example.licencjat.employee.employeeCRUD.models.EmployeeOrderDto;
 import com.example.licencjat.exceptions.NotFoundExceptions.IncorrectIdInputException;
@@ -32,22 +33,22 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void addOrder(OrderCommand command) {
-        //Validate&&Get
         var stuff = stuffRepository.findById(command.getStuffId()).orElseThrow(IncorrectIdInputException::new);
         checkIfThereIsEnoughAmount(command, stuff);
-        var client = clientRepository.findById(command.getClientId()).orElseThrow(IncorrectIdInputException::new);
+        var clientList = clientRepository.findAll().stream().filter(c -> c.getUser().getId().equals(command.getUserId())).collect(Collectors.toList());
+        if (clientList.size() == 0) {
+            throw new IncorrectIdInputException();
+        }
+        var client = clientList.get(0);
 
-        //Create
         var order = mapper.map(command.getWebInput(), Order.class);
         order.setId(UUID.fromString(idGenerator.generateId()));
         order.setDone(false);
 
-        //SetStuff
         stuff.setQuantity(stuff.getQuantity() - command.getWebInput().getAmount());
         stuff.addOrder(order);
         stuffRepository.save(stuff);
 
-        //SetClient
         client.addOrder(order);
         clientRepository.save(client);
     }
@@ -69,7 +70,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDetailsDto getOrderById(OrderCommand command) {
         var order = orderRepository.findById(command.getOrderId()).orElseThrow(IncorrectIdInputException::new);
-        EmployeeOrderDto employee = new EmployeeOrderDto();
+        var employee = new EmployeeOrderDto();
         if (order.getEmployee() != null) {
             employee = mapper.map(order.getEmployee(), EmployeeOrderDto.class);
         }

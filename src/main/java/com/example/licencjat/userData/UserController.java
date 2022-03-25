@@ -15,14 +15,6 @@ import java.util.UUID;
 public class UserController {
     private final UserService userService;
 
-
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public void registerAnUser(@Valid @RequestBody UserWebInput webInput) {
-        userService.addUser(UserServiceCommand.builder()
-                .webInput(webInput).build());
-    }
-
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<UserDataListDto> getUsers() {

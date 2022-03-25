@@ -4,6 +4,7 @@ import com.example.licencjat.userData.models.User;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,5 +23,9 @@ public class AuthorityGroup {
     private String name;
 
     @ManyToMany(mappedBy = "userGroups")
-    private List<User> userData;
+    private List<User> users = new ArrayList<>();
+
+    public void addUser(User u) {
+        users.add(u);
+    }
 }

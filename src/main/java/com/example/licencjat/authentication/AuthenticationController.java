@@ -21,7 +21,7 @@ import java.util.UUID;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 public class AuthenticationController {
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtTokenUtil;
@@ -51,11 +51,6 @@ public class AuthenticationController {
         );
     }
 
-    @PostMapping("/register")
-    @ResponseStatus(value = HttpStatus.CREATED, reason = "User created successfully")
-    public void registerAnUser(@Valid @RequestBody UserWebInput webInput) {
-        userService.addUser(UserServiceCommand.builder().webInput(webInput).build());
-    }
 
 
     @PostMapping("/refresh_token")

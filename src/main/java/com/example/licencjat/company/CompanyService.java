@@ -11,4 +11,5 @@ interface CompanyService {
     List<CompanyListDto> getCompanies();
     void deleteCompany(CompanyServiceCommand command);
     void addCompany(CompanyServiceCommand command);
+//    void getCompanysWithStuffs();
 }
