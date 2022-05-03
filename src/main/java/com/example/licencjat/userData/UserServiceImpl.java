@@ -2,16 +2,14 @@ package com.example.licencjat.userData;
 
 import com.example.licencjat.UI.PasswordService;
 import com.example.licencjat.UI.idGenerator.IdGenerator;
+import com.example.licencjat.authentication.ExpiredTokenException;
 import com.example.licencjat.authorities.AuthorityRepository;
 import com.example.licencjat.authorities.models.AuthorityGroup;
 import com.example.licencjat.authorities.models.ROLES;
 import com.example.licencjat.email.EmailSenderServiceImpl;
 import com.example.licencjat.exceptions.NotFoundExceptions.IncorrectIdInputException;
 import com.example.licencjat.exceptions.IllegalArgumentExceptions.IncorrectInputDataException;
-import com.example.licencjat.userData.models.User;
-import com.example.licencjat.userData.models.UserDataDto;
-import com.example.licencjat.userData.models.UserDataListDto;
-import com.example.licencjat.userData.models.UserServiceCommand;
+import com.example.licencjat.userData.models.*;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -93,16 +91,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String getEmail(UUID id) {
-        var user = userRepository.findById(id).orElseThrow();
+        var user = userRepository.findById(id).orElseThrow(() -> new ExpiredTokenException("Wrong token!"));
         return user.getEmail();
     }
 
     @Override
-    public List<UserDataListDto> getUsers() {
+    public List<UserChatDto> getUsers() {
         var users = userRepository.findAll();
 
         return users.stream().map(u ->
-            mapper.map(u, UserDataListDto.class)
+            mapper.map(u, UserChatDto.class)
             ).collect(Collectors.toList());
     }
 

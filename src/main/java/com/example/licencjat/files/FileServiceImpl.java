@@ -9,16 +9,18 @@ import com.example.licencjat.files.models.File;
 import com.example.licencjat.files.models.FileDto;
 import com.example.licencjat.files.models.FileListDto;
 import com.example.licencjat.files.models.FileUploadCommand;
+import com.example.licencjat.security.AuthenticationFacade;
 import com.example.licencjat.userData.UserRepository;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,6 +28,7 @@ import java.util.stream.Collectors;
 public class FileServiceImpl implements FileService{
     private final FileRepository fileRepository;
     private final UserRepository userRepository;
+    private final AuthenticationFacade authenticationFacade;
     private final IdGenerator idGenerator;
     private final ModelMapper mapper;
     private final Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
@@ -35,7 +38,10 @@ public class FileServiceImpl implements FileService{
 
     @Override
     public void updateAnImage(FileUploadCommand command) {
-        var user = userRepository.findById(command.getUserId()).orElseThrow(IncorrectIdInputException::new);
+        System.out.println(command.getFromId());
+        System.out.println(command.getSendToId());
+        var receiver = userRepository.findById(command.getSendToId()).orElseThrow(IncorrectIdInputException::new);
+        var sender = userRepository.findById(command.getFromId()).orElseThrow(IncorrectIdInputException::new);
 
         var options = ObjectUtils.asMap("resource_type", "auto",
         "format", "pdf");
@@ -43,21 +49,19 @@ public class FileServiceImpl implements FileService{
         try {
             var result = cloudinary.uploader().upload(command.getBytes(), options);
 
-            user.addFile(File.builder()
-                .fileId(UUID.fromString(idGenerator.generateId()))
-                .cloudinaryId(result.get("public_id").toString())
-                .createdAt(LocalDateTime.now())
-                .fileUrl((String) result.get("secure_url"))
-                .name(command.getName())
-                .sendToId(command.getSendToId()).build());
-
+            receiver.addFile(File.builder()
+                    .fileId(UUID.fromString(idGenerator.generateId()))
+                    .cloudinaryId(result.get("public_id").toString())
+                    .createdAt(new Timestamp(System.currentTimeMillis()))
+                    .url((String) result.get("secure_url"))
+                    .name(command.getName())
+                    .senderFirstName(sender.getFirstName())
+                    .senderLastName(sender.getLastName()).build());
         } catch (IOException e) {
             throw new CloudinaryException(e.getMessage());
         }
 
-
-
-        userRepository.save(user);
+        userRepository.save(receiver);
     }
 
     @Override
@@ -71,9 +75,10 @@ public class FileServiceImpl implements FileService{
 
     @Override
     public List<FileListDto> getFiles() {
-        var files = fileRepository.findAll();
+        var userId = authenticationFacade.getCurrentAuthenticatedUser().getId();
+        var owner = userRepository.findById(userId).orElseThrow(IncorrectIdInputException::new);
 
-        return files.stream()
+        return owner.getFiles().stream()
                 .map(f -> mapper.map(f, FileListDto.class))
                 .collect(Collectors.toList());
     }

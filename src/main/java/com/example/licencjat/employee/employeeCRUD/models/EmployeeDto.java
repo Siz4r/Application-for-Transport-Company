@@ -10,6 +10,7 @@ import java.util.Set;
 @Setter
 public class EmployeeDto {
     private String id;
+    private String userId;
     private String userFirstName;
     private String userLastName;
     private String userEmail;

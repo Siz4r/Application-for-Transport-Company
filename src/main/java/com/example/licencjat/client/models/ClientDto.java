@@ -11,6 +11,7 @@ import java.util.UUID;
 @Setter
 public class ClientDto {
     private UUID id;
+    private UUID userId;
     private String userFirstName;
     private String userLastName;
     private String userEmail;

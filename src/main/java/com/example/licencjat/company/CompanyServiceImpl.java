@@ -43,10 +43,14 @@ public class CompanyServiceImpl implements CompanyService{
     }
 
     @Override
-    public void addCompany(CompanyServiceCommand command) {
+    public UUID addCompany(CompanyServiceCommand command) {
         var company = mapper.map(command.getWebInput(), Company.class);
-        company.setId(UUID.fromString(idGenerator.generateId()));
+
+        var id = UUID.fromString(idGenerator.generateId());
+        company.setId(id);
 
         repository.save(company);
+
+        return id;
     }
 }

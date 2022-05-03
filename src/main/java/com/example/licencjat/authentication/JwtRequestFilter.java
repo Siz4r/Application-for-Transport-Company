@@ -37,10 +37,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             jwt = authorizationHeader.substring(7);
-            try {
-                id = jwtUtil.extractId(jwt);
-            } catch (Exception e) {
-                throw new ExpiredTokenException("Token is probably expired!");
+            if (jwtUtil.validateToken(jwt, httpServletRequest)) {
+                try {
+                    id = jwtUtil.extractId(jwt);
+                } catch (Exception e) {
+                    throw new ExpiredTokenException("Token is probably expired!");
+                }
             }
         }
 
@@ -53,7 +55,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
             var userDetails = new User(user.getEmail(), user.getPassword(), authorities);
 
-            if (jwtUtil.validateToken(jwt, userDetails)) {
+            if (jwtUtil.validateIfTokenBelongsToUser(jwt, userDetails)) {
 
                 var usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities()

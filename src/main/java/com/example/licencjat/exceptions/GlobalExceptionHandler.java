@@ -8,6 +8,7 @@ import com.example.licencjat.exceptions.NotFoundExceptions.CloudinaryException;
 import com.example.licencjat.exceptions.NotFoundExceptions.IncorrectIdInputException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -48,6 +49,12 @@ public class GlobalExceptionHandler {
     @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
     @ExceptionHandler({ExpiredTokenException.class})
     public ResponseEntity<Object> handleExpiredToken(ExpiredTokenException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler({BadCredentialsException.class})
+    public ResponseEntity<Object> handleBadCredentials(BadCredentialsException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.UNAUTHORIZED);
     }
 }

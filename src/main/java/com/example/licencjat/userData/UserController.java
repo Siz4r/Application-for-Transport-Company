@@ -1,5 +1,6 @@
 package com.example.licencjat.userData;
 
+import com.example.licencjat.UI.Annotations.PreAuthorizeAdmin;
 import com.example.licencjat.userData.models.*;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,7 +18,8 @@ public class UserController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<UserDataListDto> getUsers() {
+//    @PreAuthorizeAdmin
+    public List<UserChatDto> getUsers() {
         return userService.getUsers();
     }
 

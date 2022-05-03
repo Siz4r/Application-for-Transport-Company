@@ -7,6 +7,7 @@ import lombok.*;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -20,10 +21,11 @@ public class File {
     @Id
     private UUID fileId;
     private String cloudinaryId;
-    private String fileUrl;
-    private UUID sendToId;
+    private String url;
+    private String senderFirstName;
+    private String senderLastName;
     private String name;
-    private LocalDateTime createdAt;
+    private Timestamp createdAt;
 
     @JsonBackReference
     @ManyToOne

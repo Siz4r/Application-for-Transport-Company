@@ -26,12 +26,11 @@ public class FileController {
     public void addFile(@RequestParam("file") MultipartFile file,
                         @PathVariable("ownerId") UUID ownerId,
                         @PathVariable("sendToId") UUID sendToId) {
-
         try {
             service.updateAnImage(FileUploadCommand.builder()
-                    .userId(ownerId)
+                    .fromId(ownerId)
                     .sendToId(sendToId)
-                    .name(file.getName())
+                    .name(file.getOriginalFilename())
                     .bytes(file.getBytes()).build());
         } catch (IOException e) {
             e.printStackTrace();

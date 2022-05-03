@@ -3,13 +3,12 @@ package com.example.licencjat.authentication;
 import com.example.licencjat.exceptions.NotFoundExceptions.IncorrectIdInputException;
 import com.example.licencjat.exceptions.IllegalArgumentExceptions.IncorrectInputDataException;
 import com.example.licencjat.userData.UserRepository;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.function.Function;
 
@@ -58,13 +57,31 @@ public class JwtUtil {
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
     }
 
-    public Boolean validateToken(String token, UserDetails userDetails) {
+    public Boolean validateToken(String token, HttpServletRequest httpServletRequest) {
+        try {
+            Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token);
+            return true;
+        }catch (SignatureException ex){
+            System.out.println("Invalid JWT Signature");
+        }catch (MalformedJwtException ex){
+            System.out.println("Invalid JWT token");
+        }catch (ExpiredJwtException ex){
+            System.out.println("Expired JWT token");
+            httpServletRequest.setAttribute("expired",ex.getMessage());
+        }catch (UnsupportedJwtException ex){
+            System.out.println("Unsupported JWT exception");
+        }catch (IllegalArgumentException ex){
+            System.out.println("Jwt claims string is empty");
+        }
+        return false;
+    }
+    public boolean validateIfTokenBelongsToUser(String token, UserDetails userDetails) {
         final var email = userRepository.findById(UUID.fromString(extractId(token))).orElseThrow(() -> new IncorrectIdInputException("Wrong id!")).getEmail();
-        if (isTokenExpired(token)) {
-            throw new ExpiredTokenException("Token has expired");
-        } else if (!email.equals(userDetails.getUsername())) {
+
+        if (!email.equals(userDetails.getUsername())) {
             throw new IncorrectInputDataException("Wrong email! expected: " + email + " acquired " + userDetails.getUsername());
         }
         return true;
     }
+
 }

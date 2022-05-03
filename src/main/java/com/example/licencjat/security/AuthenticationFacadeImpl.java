@@ -5,8 +5,14 @@ import com.example.licencjat.userData.UserService;
 import com.example.licencjat.userData.models.UserDataDto;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -23,4 +29,30 @@ public class AuthenticationFacadeImpl implements AuthenticationFacade {
 
         return userService.getUserByEmail(authentication.getName());
     }
+
+    @Override
+    public List<String> getCurrentAuthenticatedUserAuthorities() {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if ((authentication instanceof AnonymousAuthenticationToken)) {
+            throw new ForbiddenException();
+        }
+
+        return authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
+    }
+
+    @Override
+    public Boolean isCurrentAuthenticatedUserAnAdmin() {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if ((authentication instanceof AnonymousAuthenticationToken)) {
+            throw new ForbiddenException();
+        }
+
+        return authentication.getAuthorities()
+                .stream().map(GrantedAuthority::getAuthority)
+                .anyMatch(a -> a.equals("A00"));
+    }
+
+
 }

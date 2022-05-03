@@ -8,7 +8,7 @@ import com.example.licencjat.company.models.CompanyServiceCommand;
 import com.example.licencjat.company.models.CompanyWebInput;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -22,10 +22,11 @@ public class CompanyController {
     private final CompanyService companyService;
 
     @PostMapping
-    @ResponseStatus(value = HttpStatus.CREATED, reason = "Resource created successfully")
     @PreAuthorizeAdmin
-    public void addCompany(@Valid @RequestBody CompanyWebInput webInput) {
-        companyService.addCompany(CompanyServiceCommand.builder().webInput(webInput).build());
+    public ResponseEntity<String> addCompany(@Valid @RequestBody CompanyWebInput webInput) {
+        return new ResponseEntity<String>(
+                companyService.addCompany(CompanyServiceCommand.builder().webInput(webInput).build()).toString(),
+                HttpStatus.CREATED);
     }
 
     @GetMapping

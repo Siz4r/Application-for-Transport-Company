@@ -16,6 +16,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -40,6 +41,14 @@ public class ClientServiceImpl implements ClientService{
     }
 
     @Override
+    public void addAdmin(ClientCommand command) {
+        var user = userService.addUser(UserServiceCommand.builder().webInput(command.getWebInput()).build(), ROLES.ADMIN);
+
+        clientRepository.save(Client.builder().id(UUID.fromString(idGenerator.generateId())).user(user).build());
+    }
+
+
+    @Override
     public void deleteClient(ClientCommand command) {
         clientRepository.deleteById(command.getId());
     }
@@ -49,6 +58,10 @@ public class ClientServiceImpl implements ClientService{
         var client = clientRepository.findById(command.getId()).orElseThrow(() -> new IncorrectIdInputException(""));
 
         var id = authenticationFacade.getCurrentAuthenticatedUser().getId();
+
+        if (authenticationFacade.isCurrentAuthenticatedUserAnAdmin()) {
+            return mapper.map(client, ClientDto.class);
+        }
 
         if (!id.equals(client.getUser().getId())) {
             throw new ForbiddenException();
@@ -62,6 +75,12 @@ public class ClientServiceImpl implements ClientService{
         var clients = clientRepository.findAll();
 
         var id = authenticationFacade.getCurrentAuthenticatedUser().getId();
+
+        if (authenticationFacade.isCurrentAuthenticatedUserAnAdmin()) {
+            return clients.stream()
+                    .map(c -> mapper.map(c, ClientListDto.class))
+                    .collect(Collectors.toList());
+        }
 
         return clients.stream()
                 .filter(c -> c.getUser().getId().equals(id))

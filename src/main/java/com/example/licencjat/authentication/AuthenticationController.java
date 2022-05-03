@@ -1,10 +1,9 @@
 package com.example.licencjat.authentication;
 
+import com.example.licencjat.UI.Annotations.PreAuthorizeAny;
 import com.example.licencjat.authentication.models.AuthenticateRequest;
 import com.example.licencjat.authentication.models.AuthenticationDto;
 import com.example.licencjat.userData.UserService;
-import com.example.licencjat.userData.models.UserServiceCommand;
-import com.example.licencjat.userData.models.UserWebInput;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,13 +34,15 @@ public class AuthenticationController {
                     new UsernamePasswordAuthenticationToken(authenticateRequest.getUsername(), authenticateRequest.getPassword())
             );
         } catch (AuthenticationException e) {
-            throw new BadCredentialsException("Error occurred while authenticating user!");
+            System.out.println(e.getMessage());
+            System.out.println(authenticateRequest.getUsername());
+            throw new BadCredentialsException("Wrong login or password!");
         }
 
         final var userDetails = userService
                 .loadUserByUsername(authenticateRequest.getUsername());
 
-        addCookieToResponse(response, jwtTokenUtil.generateToken(userDetails, 1000 * 60 * 60 * 24 * 7));
+        addCookieToResponse(response, jwtTokenUtil.generateToken(userDetails, 1000 * 60 * 60 * 24 * 7), 1000 * 60 * 60 * 24 * 7);
 
         return ResponseEntity.ok(
                 AuthenticationDto.builder()
@@ -68,13 +69,22 @@ public class AuthenticationController {
         }
     }
 
-    private void addCookieToResponse(HttpServletResponse response, String refreshToken) {
+    @PostMapping("/logout")
+    @PreAuthorizeAny
+    @ResponseStatus(value = HttpStatus.OK)
+    public ResponseEntity<?> logout(HttpServletResponse response) {
+        addCookieToResponse(response, null, 0);
+        return ResponseEntity.ok(true);
+    }
+
+    private void addCookieToResponse(HttpServletResponse response, String refreshToken, int age) {
         var cookie = new Cookie("RefreshToken", refreshToken);
         cookie.setHttpOnly(true);
         cookie.setPath("/");
         // @TODO: change to production domain
         cookie.setDomain("localhost");
         cookie.setSecure(true);
+        cookie.setMaxAge(age);
         response.addCookie(cookie);
     }
 }

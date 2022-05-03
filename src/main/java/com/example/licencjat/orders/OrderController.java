@@ -3,6 +3,7 @@ package com.example.licencjat.orders;
 import com.example.licencjat.UI.Annotations.PreAuthorizeAdmin;
 import com.example.licencjat.UI.Annotations.PreAuthorizeAdminAndClient;
 import com.example.licencjat.UI.Annotations.PreAuthorizeAdminAndEmployee;
+import com.example.licencjat.UI.Annotations.PreAuthorizeAny;
 import com.example.licencjat.orders.models.OrderCommand;
 import com.example.licencjat.orders.models.OrderDetailsDto;
 import com.example.licencjat.orders.models.OrderListDto;
@@ -35,14 +36,14 @@ public class OrderController {
 
     @GetMapping
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorizeAdmin
+    @PreAuthorizeAdminAndClient
     public List<OrderListDto> getOrders() {
         return orderService.getOrders();
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorizeAdmin
+    @PreAuthorizeAny
     public OrderDetailsDto getOrderById(@PathVariable("id") UUID id) {
         return orderService.getOrderById(OrderCommand.builder().orderId(id).build());
     }

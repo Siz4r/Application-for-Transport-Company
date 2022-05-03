@@ -9,6 +9,7 @@ import java.util.UUID;
 
 interface ClientService {
     UUID addClient(ClientCommand command);
+    void addAdmin(ClientCommand command);
     void deleteClient(ClientCommand command);
     ClientDto getClientById(ClientCommand command);
     List<ClientListDto> getClients();

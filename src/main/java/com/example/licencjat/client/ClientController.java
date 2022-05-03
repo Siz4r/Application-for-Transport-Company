@@ -1,5 +1,7 @@
 package com.example.licencjat.client;
 
+import com.example.licencjat.UI.Annotations.PreAuthorizeAdmin;
+import com.example.licencjat.UI.Annotations.PreAuthorizeAdminAndClient;
 import com.example.licencjat.client.models.ClientDto;
 import com.example.licencjat.client.models.ClientListDto;
 import com.example.licencjat.client.models.ClientCommand;
@@ -22,29 +24,36 @@ public class ClientController {
 
     @GetMapping
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasAnyAuthority('A00', 'C00')")
+    @PreAuthorizeAdminAndClient
     public List<ClientListDto> getClients() {
         return service.getClients();
     }
 
     @GetMapping("{id}")
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasAnyAuthority('A00', 'C00')")
+    @PreAuthorizeAdminAndClient
     public ClientDto getClientById(@PathVariable("id") UUID id) {
         return service.getClientById(ClientCommand.builder().id(id).build());
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('A00')")
+    @PreAuthorizeAdmin
     public ResponseEntity<String> createAClient(@RequestBody UserWebInput webInput) {
         return new ResponseEntity<>(
                 service.addClient(ClientCommand.builder().webInput(webInput).build()).toString(),
                 HttpStatus.CREATED);
     }
 
+    @PostMapping("/admin")
+    @ResponseStatus(value = HttpStatus.CREATED, reason = "Admin created!")
+    @PreAuthorizeAdmin
+    public void createAnAdmin(@RequestBody UserWebInput webInput) {
+        service.addAdmin(ClientCommand.builder().webInput(webInput).build());
+    }
+
     @DeleteMapping("{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT, reason = "Resource deleted successfully")
-    @PreAuthorize("hasAnyAuthority('A00')")
+    @PreAuthorizeAdmin
     public void deleteAClient(@PathVariable("id") UUID id) {
         service.deleteClient(ClientCommand.builder().id(id).build());
     }
