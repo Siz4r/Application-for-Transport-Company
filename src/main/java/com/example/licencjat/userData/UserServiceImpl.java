@@ -7,6 +7,7 @@ import com.example.licencjat.authorities.AuthorityRepository;
 import com.example.licencjat.authorities.models.AuthorityGroup;
 import com.example.licencjat.authorities.models.ROLES;
 import com.example.licencjat.email.EmailSenderServiceImpl;
+import com.example.licencjat.exceptions.IllegalArgumentExceptions.IncorrectPhoneNumberException;
 import com.example.licencjat.exceptions.NotFoundExceptions.IncorrectIdInputException;
 import com.example.licencjat.exceptions.IllegalArgumentExceptions.IncorrectInputDataException;
 import com.example.licencjat.userData.models.*;
@@ -111,8 +112,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateAnUser(UserServiceCommand command) {
-        new UserDataValidator(userRepository).validateUserUpdateCommand(command.getUpdateInput(), command.getId());
         var user = userRepository.findById(command.getId()).orElseThrow(IncorrectIdInputException::new);
+        var phoneNumber = command.getUpdateInput().getPhoneNumber();
+        try {
+            new UserDataValidator(userRepository).validateUserUpdateCommand(command.getUpdateInput(), command.getId());
+
+        } catch (IncorrectPhoneNumberException i) {
+            if (!user.getPhoneNumber().equals(command.getUpdateInput().getPhoneNumber())) {
+                throw new IncorrectPhoneNumberException("Ten numer telefonu jest już zajęty!");
+            }
+        }
 
         mapper.map(command.getUpdateInput(), user);
 

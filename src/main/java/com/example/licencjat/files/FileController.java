@@ -1,5 +1,6 @@
 package com.example.licencjat.files;
 
+import com.example.licencjat.exceptions.NotFoundExceptions.CloudinaryException;
 import com.example.licencjat.files.models.FileDto;
 import com.example.licencjat.files.models.FileListDto;
 import com.example.licencjat.files.models.FileUploadCommand;
@@ -32,8 +33,8 @@ public class FileController {
                     .sendToId(sendToId)
                     .name(file.getOriginalFilename())
                     .bytes(file.getBytes()).build());
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            throw new CloudinaryException(e.getMessage());
         }
     }
 

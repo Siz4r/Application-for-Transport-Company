@@ -46,6 +46,8 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "group_id"))
     private List<AuthorityGroup> userGroups= new ArrayList<>();
 
+
+
     public void addFile(File file) {
         files.add(file);
         file.setUser(this);

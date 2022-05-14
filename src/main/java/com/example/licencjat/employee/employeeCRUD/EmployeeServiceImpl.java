@@ -79,6 +79,13 @@ public class EmployeeServiceImpl implements EmployeeService{
 
     @Override
     public void deleteAnEmployee(EmployeeServiceCommand command) {
+        var employee = employeeRepository.findById(command.getId()).orElseThrow(IncorrectIdInputException::new);
+
+        for (var o :
+                employee.getOrderList()) {
+            o.setEmployee(null);
+        }
+
         employeeRepository.deleteById(command.getId());
     }
 }

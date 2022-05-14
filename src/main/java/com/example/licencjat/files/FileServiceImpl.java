@@ -38,13 +38,13 @@ public class FileServiceImpl implements FileService{
 
     @Override
     public void updateAnImage(FileUploadCommand command) {
-        System.out.println(command.getFromId());
-        System.out.println(command.getSendToId());
         var receiver = userRepository.findById(command.getSendToId()).orElseThrow(IncorrectIdInputException::new);
         var sender = userRepository.findById(command.getFromId()).orElseThrow(IncorrectIdInputException::new);
 
+        var fileName = command.getName();
+
         var options = ObjectUtils.asMap("resource_type", "auto",
-        "format", "pdf");
+        "format", fileName.substring(fileName.lastIndexOf(".")));
 
         try {
             var result = cloudinary.uploader().upload(command.getBytes(), options);

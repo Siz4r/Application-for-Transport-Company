@@ -50,6 +50,13 @@ public class ClientServiceImpl implements ClientService{
 
     @Override
     public void deleteClient(ClientCommand command) {
+        var client = clientRepository.findById(command.getId()).orElseThrow(IncorrectIdInputException::new);
+
+        for (var o :
+                client.getOrderList()) {
+            o.setClient(null);
+        }
+
         clientRepository.deleteById(command.getId());
     }
 

@@ -23,8 +23,7 @@ public class Employee {
 
     @JsonManagedReference
     @OneToMany(
-            mappedBy = "employee",
-            orphanRemoval = true
+            mappedBy = "employee"
     )
     private Set<Order> orderList = new HashSet<>();
 

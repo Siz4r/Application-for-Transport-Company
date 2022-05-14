@@ -19,7 +19,7 @@ public class UserDataValidator {
         var validator = new EmailSenderValidator();
         validator.validateEmail(webInput.getEmail());
         if (!PhoneNumberUtil.getInstance().isPossibleNumber(webInput.getPhoneNumber(), "PL")) {
-            throw new IncorrectInputDataException("Wrong phone number");
+            throw new IncorrectInputDataException("Nieprawidłowy numer telefonu");
         }
 
         checkIfUserWithSuchEmailExists(webInput.getEmail());
@@ -29,7 +29,7 @@ public class UserDataValidator {
 
     public void validateUserUpdateCommand(UserUpdateInput updateInput, UUID id) {
         if (!PhoneNumberUtil.getInstance().isPossibleNumber(updateInput.getPhoneNumber(), "PL")) {
-            throw new IncorrectPhoneNumberException("Wrong phone number");
+            throw new IncorrectPhoneNumberException("Nieprawidłowy numer telefonu");
         }
         checkIfUserWithSuchPhoneNumberExists(updateInput.getPhoneNumber(), id);
     }
@@ -37,7 +37,7 @@ public class UserDataValidator {
     private void checkIfUserWithSuchEmailExists(String email) {
         var userData = userRepository.findUserByEmail(email);
         if (userData.isPresent()) {
-            throw new WrongEmailException("User with such email already exists!");
+            throw new WrongEmailException("Użytkownik z takim emailem już istnieje!");
         }
     }
 
@@ -45,7 +45,7 @@ public class UserDataValidator {
         var user = userRepository.findUserByPhoneNumber(phoneNumber);
         if (user.isPresent()) {
             if (!user.get().getId().equals(id)){
-                throw new IncorrectPhoneNumberException("There is already user with such phone number!");
+                throw new IncorrectPhoneNumberException("Istnieje już użytkownik z takim numerem telefonu!");
             }
         }
     }

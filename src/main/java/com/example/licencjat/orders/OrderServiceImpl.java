@@ -93,7 +93,18 @@ public class OrderServiceImpl implements OrderService {
             employee = mapper.map(order.getEmployee(), EmployeeOrderDto.class);
         }
 
-        var client = mapper.map(order.getClient(), ClientOrderDto.class);
+        ClientOrderDto client = new ClientOrderDto();
+        if (order.getClient() != null) {
+            client = mapper.map(order.getClient(), ClientOrderDto.class);
+        } else {
+            client.setUserFirstName("Użytkownik prawdopodobnie został usunięty!");
+            client.setUserBuildingNumber(1);
+            client.setUserLastName("");
+            client.setUserCity("  ");
+            client.setUserPostalCode("  ");
+            client.setUserStreet("  ");
+        }
+
         var stuff = mapper.map(order.getStuff(), StuffOrderDto.class);
 
         var orderDto = mapper.map(order, OrderDetailsDto.class);
@@ -119,12 +130,18 @@ public class OrderServiceImpl implements OrderService {
 
         var differnceInAmount = order.getAmount() - command.getWebInput().getAmount();
         var stuff = order.getStuff();
+
         if (stuff.getQuantity() + differnceInAmount < 0) {
             throw new IncorrectInputDataException("There is no enough resources!");
         }
-        stuff.setQuantity(stuff.getQuantity() + differnceInAmount);
 
+        stuff.setQuantity(stuff.getQuantity() + differnceInAmount);
         order.setAmount(command.getWebInput().getAmount());
+
+        if (command.getWebInput().getAmount() == 0) {
+            order.setDone(true);
+        }
+
         stuffRepository.save(stuff);
         orderRepository.save(order);
     }

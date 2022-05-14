@@ -34,8 +34,6 @@ public class AuthenticationController {
                     new UsernamePasswordAuthenticationToken(authenticateRequest.getUsername(), authenticateRequest.getPassword())
             );
         } catch (AuthenticationException e) {
-            System.out.println(e.getMessage());
-            System.out.println(authenticateRequest.getUsername());
             throw new BadCredentialsException("Wrong login or password!");
         }
 
