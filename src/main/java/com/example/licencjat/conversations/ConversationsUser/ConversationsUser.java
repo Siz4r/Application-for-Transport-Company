@@ -2,10 +2,7 @@ package com.example.licencjat.conversations.ConversationsUser;
 
 import com.example.licencjat.conversations.ConversationsCRUD.models.Conversation;
 import com.example.licencjat.userData.models.User;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -14,13 +11,14 @@ import java.util.UUID;
 
 @Entity
 @Getter @Setter
+@Builder
 @AllArgsConstructor @NoArgsConstructor
 public class ConversationsUser {
     @Id
     private UUID id;
 
     @ManyToOne
-    private Conversation conversations;
+    private Conversation conversation;
 
     @ManyToOne
     private User user;

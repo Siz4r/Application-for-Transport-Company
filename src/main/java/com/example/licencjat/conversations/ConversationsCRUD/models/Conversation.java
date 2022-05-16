@@ -23,8 +23,8 @@ public class Conversation {
     @OneToMany
     private Set<Message> messages = new HashSet<>();
 
-    @ManyToOne
-    private ConversationsUser conversationsUsers;
+    @OneToMany
+    private Set<ConversationsUser> conversationsUsers;
 
     private String name;
 }

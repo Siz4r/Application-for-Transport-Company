@@ -1,7 +1,6 @@
 package com.example.licencjat.conversations.ConversationsUser;
 
 import com.example.licencjat.UI.Annotations.PreAuthorizeAny;
-import com.example.licencjat.userData.models.UserChatDto;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

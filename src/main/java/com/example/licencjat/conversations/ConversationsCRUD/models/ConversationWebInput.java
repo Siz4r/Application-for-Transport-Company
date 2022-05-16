@@ -1,11 +1,11 @@
 package com.example.licencjat.conversations.ConversationsCRUD.models;
 
-import com.example.licencjat.userData.models.UserChatDto;
 import lombok.Getter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 public class ConversationWebInput {
@@ -13,5 +13,5 @@ public class ConversationWebInput {
     private String name;
 
     @NotNull
-    private List<UserChatDto> users;
+    private List<UUID> users;
 }

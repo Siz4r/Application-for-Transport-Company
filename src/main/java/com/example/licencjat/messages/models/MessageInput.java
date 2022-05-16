@@ -9,6 +9,9 @@ import java.util.UUID;
 @Getter
 public class MessageInput {
     @NotNull
+    private UUID convID;
+
+    @NotNull
     private UUID senderID;
 
     @NotBlank

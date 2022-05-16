@@ -11,9 +11,9 @@ import java.util.UUID;
 @Getter
 @Setter
 public class ConversationListDTO {
-    private UUID id;
+    private UUID conversationId;
 
-    private String name;
+    private String conversationName;
 
     private Set<UserChatDto> users;
 

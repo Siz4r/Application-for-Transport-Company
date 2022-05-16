@@ -12,7 +12,8 @@ import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config){
-        config.enableSimpleBroker("/topic");
+        config.enableSimpleBroker("/receive", "/conversation");
+        config.setUserDestinationPrefix("/conversation");
         config.setApplicationDestinationPrefixes("/app");
     }
 
