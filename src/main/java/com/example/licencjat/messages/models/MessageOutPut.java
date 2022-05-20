@@ -11,6 +11,6 @@ import java.util.UUID;
 @Builder
 public class MessageOutPut {
     private String text;
-    private UUID sender;
-    private UUID convId;
+    private UUID senderId;
+    private UUID conversationId;
 }

@@ -9,5 +9,5 @@ import java.util.UUID;
 public interface ConversationsService {
     List<ConversationListDTO> getConversations();
     void deleteConversation(UUID id);
-    UUID createConversation(ConversationWebInput webInput);
+    ConversationListDTO createConversation(ConversationWebInput webInput);
 }

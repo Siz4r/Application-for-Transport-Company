@@ -7,16 +7,15 @@ import com.example.licencjat.conversations.ConversationsCRUD.models.Conversation
 import com.example.licencjat.conversations.ConversationsUser.ConversationUserRepository;
 import com.example.licencjat.conversations.ConversationsUser.ConversationsUser;
 import com.example.licencjat.exceptions.NotFoundExceptions.IncorrectIdInputException;
+import com.example.licencjat.messages.MessageRepository;
+import com.example.licencjat.messages.models.MessageOutPut;
 import com.example.licencjat.userData.UserRepository;
 import com.example.licencjat.userData.models.UserChatDto;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,6 +23,7 @@ import java.util.stream.Collectors;
 public class ConversationsServiceImpl implements ConversationsService{
     private final ConversationRepository conversationRepository;
     private final ConversationUserRepository conversationsUserRepository;
+    private final MessageRepository messageRepository;
     private final UserRepository userRepository;
     private final ModelMapper mapper;
     private final IdGenerator idGenerator;
@@ -32,7 +32,20 @@ public class ConversationsServiceImpl implements ConversationsService{
 
     public List<ConversationListDTO> getConversations() {
         var convs = conversationRepository.findAll().stream()
-                .map(c -> mapper.map(c, ConversationListDTO.class))
+                .map(c -> {
+                    var conv = mapper.map(c, ConversationListDTO.class);
+                    conv.setMessages(messageRepository.getMessageByConversationId(c.getId()).stream().map(m -> MessageOutPut.builder()
+                            .senderId(m.getOwnerId())
+                            .text(m.getContent())
+                            .conversationId(c.getId())
+                            .build()).collect(Collectors.toSet()));
+
+                    for (var m :
+                            c.getMessages()) {
+                        System.out.println(m.getContent());
+                    }
+                    return conv;
+                })
                 .collect(Collectors.toList());
 
         for (var c :
@@ -54,13 +67,18 @@ public class ConversationsServiceImpl implements ConversationsService{
     }
 
     @Override
-    public UUID createConversation(ConversationWebInput webInput) {
+    public ConversationListDTO createConversation(ConversationWebInput webInput) {
         var id = UUID.fromString(idGenerator.generateId());
 
         var conv = Conversation.builder()
                 .id(id)
                 .name(webInput.getName()).build();
+
+        System.out.println("elo");
+
         conversationRepository.save(conv);
+
+        var usersDto = new HashSet<UserChatDto>();
 
         for (var userId :
                 webInput.getUsers()) {
@@ -69,9 +87,16 @@ public class ConversationsServiceImpl implements ConversationsService{
                     .id(UUID.fromString(idGenerator.generateId()))
                     .conversation(conv)
                     .user(user).build());
+            usersDto.add(mapper.map(user, UserChatDto.class));
         }
 
+        var convDTO = new ConversationListDTO();
 
-        return id;
+        convDTO.setConversationName(webInput.getName());
+        convDTO.setUsers(usersDto);
+        convDTO.setMessages(new HashSet<>());
+        convDTO.setConversationId(id);
+
+        return convDTO;
     }
 }
