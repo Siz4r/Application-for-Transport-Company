@@ -9,6 +9,7 @@ import lombok.Setter;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import java.sql.Timestamp;
 import java.util.UUID;
 
 @Entity
@@ -24,4 +25,7 @@ public class Message {
     private UUID ownerId;
 
     private String content;
+
+    private Timestamp createdAt = new Timestamp(System.currentTimeMillis());
+
 }

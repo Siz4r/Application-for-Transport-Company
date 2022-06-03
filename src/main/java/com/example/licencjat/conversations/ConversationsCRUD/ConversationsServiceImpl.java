@@ -9,6 +9,7 @@ import com.example.licencjat.conversations.ConversationsUser.ConversationsUser;
 import com.example.licencjat.exceptions.NotFoundExceptions.IncorrectIdInputException;
 import com.example.licencjat.messages.MessageRepository;
 import com.example.licencjat.messages.models.MessageOutPut;
+import com.example.licencjat.security.AuthenticationFacade;
 import com.example.licencjat.userData.UserRepository;
 import com.example.licencjat.userData.models.UserChatDto;
 import lombok.AllArgsConstructor;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 public class ConversationsServiceImpl implements ConversationsService{
     private final ConversationRepository conversationRepository;
     private final ConversationUserRepository conversationsUserRepository;
+    private final AuthenticationFacade authenticationFacade;
     private final MessageRepository messageRepository;
     private final UserRepository userRepository;
     private final ModelMapper mapper;
@@ -31,19 +33,24 @@ public class ConversationsServiceImpl implements ConversationsService{
     @Override
 
     public List<ConversationListDTO> getConversations() {
+        var userId = authenticationFacade.getCurrentAuthenticatedUser().getId();
         var convs = conversationRepository.findAll().stream()
+                .filter(c -> {
+                    var conversationUsers = conversationsUserRepository.getAllByConversation_Id(c.getId());
+                    return conversationUsers.stream().
+                            filter(conversationsUser -> {
+                                return conversationsUser.getUser().getId().equals(userId);
+                            })
+                            .collect(Collectors.toSet()).size() >= 1;
+                })
                 .map(c -> {
                     var conv = mapper.map(c, ConversationListDTO.class);
                     conv.setMessages(messageRepository.getMessageByConversationId(c.getId()).stream().map(m -> MessageOutPut.builder()
                             .senderId(m.getOwnerId())
                             .text(m.getContent())
                             .conversationId(c.getId())
+                            .createdAt(m.getCreatedAt())
                             .build()).collect(Collectors.toSet()));
-
-                    for (var m :
-                            c.getMessages()) {
-                        System.out.println(m.getContent());
-                    }
                     return conv;
                 })
                 .collect(Collectors.toList());

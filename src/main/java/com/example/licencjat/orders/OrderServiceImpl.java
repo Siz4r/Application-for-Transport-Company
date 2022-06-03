@@ -53,6 +53,7 @@ public class OrderServiceImpl implements OrderService {
         var order = mapper.map(command.getWebInput(), Order.class);
         order.setId(UUID.fromString(idGenerator.generateId()));
         order.setDone(false);
+        order.setClient(client);
 
         stuff.setQuantity(stuff.getQuantity() - command.getWebInput().getAmount());
         stuff.addOrder(order);

@@ -9,6 +9,7 @@ import com.example.licencjat.messages.models.MessageInput;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.UUID;
 
 @Service
@@ -22,7 +23,7 @@ public class MessageService {
         var id = idGenerator.generateId();
         var conversation = conversationRepository.findById(input.getConvID()).orElseThrow(IncorrectIdInputException::new);
 
-        repository.save(new Message(UUID.fromString(id), conversation, input.getSenderID(), input.getContent()));
+        repository.save(new Message(UUID.fromString(id), conversation, input.getSenderID(), input.getContent(), new Timestamp(System.currentTimeMillis())));
     }
 
 }

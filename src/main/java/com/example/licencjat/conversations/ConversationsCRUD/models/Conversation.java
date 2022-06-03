@@ -22,7 +22,9 @@ public class Conversation {
     )
     private Set<Message> messages = new HashSet<>();
 
-    @OneToMany
+    @OneToMany(
+            fetch = FetchType.LAZY
+    )
     private Set<ConversationsUser> conversationsUsers;
 
     private String name;

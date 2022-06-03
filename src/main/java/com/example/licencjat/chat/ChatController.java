@@ -9,6 +9,8 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
+import java.sql.Timestamp;
+
 @Controller
 @AllArgsConstructor
 public class ChatController {
@@ -21,7 +23,8 @@ public class ChatController {
         var output = MessageOutPut.builder()
                 .senderId(message.getSenderID())
                 .text(message.getContent())
-                .conversationId(message.getConvID()).build();
+                .conversationId(message.getConvID())
+                .createdAt(new Timestamp(System.currentTimeMillis())).build();
         simpMessagingTemplate.convertAndSendToUser(message.getConvID().toString(),"/private",output);
         return output;
     }
