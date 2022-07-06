@@ -2,7 +2,7 @@ package com.example.licencjat;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.event.EventListener;
+import org.springframework.core.SpringVersion;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
@@ -10,6 +10,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 public class LicencjatApplication {
 
     public static void main(String[] args) {
+        System.out.println("version: " + SpringVersion.getVersion());
         SpringApplication.run(LicencjatApplication.class, args);
     }
 }
