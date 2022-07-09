@@ -1,6 +1,6 @@
-package com.example.licencjat.authorities.models;
+package com.example.licencjat.user.authorities.models;
 
-import com.example.licencjat.userData.models.User;
+import com.example.licencjat.user.models.User;
 import lombok.*;
 
 import javax.persistence.*;

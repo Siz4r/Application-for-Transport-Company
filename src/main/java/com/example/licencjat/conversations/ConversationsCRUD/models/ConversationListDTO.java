@@ -1,7 +1,7 @@
 package com.example.licencjat.conversations.ConversationsCRUD.models;
 
 import com.example.licencjat.messages.models.MessageOutPut;
-import com.example.licencjat.userData.models.UserChatDto;
+import com.example.licencjat.user.models.UserChatDto;
 import lombok.Getter;
 import lombok.Setter;
 

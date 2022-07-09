@@ -1,15 +1,15 @@
 package com.example.licencjat.employee.employeeCRUD;
 
 import com.example.licencjat.UI.idGenerator.IdGenerator;
-import com.example.licencjat.authorities.models.ROLES;
+import com.example.licencjat.user.authorities.models.ROLES;
 import com.example.licencjat.employee.employeeCRUD.models.Employee;
 import com.example.licencjat.employee.employeeCRUD.models.EmployeeDto;
 import com.example.licencjat.employee.employeeCRUD.models.EmployeeListDto;
 import com.example.licencjat.employee.employeeCRUD.models.EmployeeServiceCommand;
 import com.example.licencjat.exceptions.NotFoundExceptions.IncorrectIdInputException;
 import com.example.licencjat.orders.models.Order;
-import com.example.licencjat.userData.UserServiceImpl;
-import com.example.licencjat.userData.models.UserServiceCommand;
+import com.example.licencjat.user.UserServiceImpl;
+import com.example.licencjat.user.models.UserServiceCommand;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -58,17 +58,6 @@ public class EmployeeServiceImpl implements EmployeeService{
     @Override
     public UUID addAnEmployee(EmployeeServiceCommand command) {
         var user = userService.addUser(UserServiceCommand.builder().webInput(command.getWebInput()).build(), ROLES.EMPLOYEE);
-
-        var id = UUID.fromString(idGenerator.generateId());
-
-        employeeRepository.save(Employee.builder().id(id).user(user).build());
-
-        return id;
-    }
-
-    @Override
-    public UUID addAnAdmin(EmployeeServiceCommand command) {
-        var user = userService.addUser(UserServiceCommand.builder().webInput(command.getWebInput()).build(), ROLES.ADMIN);
 
         var id = UUID.fromString(idGenerator.generateId());
 

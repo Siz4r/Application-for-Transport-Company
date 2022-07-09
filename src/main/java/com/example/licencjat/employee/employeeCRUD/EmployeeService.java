@@ -12,7 +12,5 @@ interface EmployeeService {
     List<EmployeeListDto> getEmployees();
     UUID addAnEmployee(EmployeeServiceCommand command);
 
-    UUID addAnAdmin(EmployeeServiceCommand command);
-
     void deleteAnEmployee(EmployeeServiceCommand command);
 }

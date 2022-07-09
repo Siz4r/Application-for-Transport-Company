@@ -1,6 +1,5 @@
 package com.example.licencjat.exceptions;
 
-import com.example.licencjat.authentication.ExpiredTokenException;
 import com.example.licencjat.exceptions.IllegalArgumentExceptions.IncorrectInputDataException;
 import com.example.licencjat.exceptions.IllegalArgumentExceptions.IncorrectPhoneNumberException;
 import com.example.licencjat.exceptions.IllegalArgumentExceptions.WrongEmailException;
@@ -20,6 +19,7 @@ import java.util.Map;
 
 /*
  * Catch and handle exceptions thrown by controllers.
+ * Doesn't include those throw by JWT filter
  * */
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -44,12 +44,6 @@ public class GlobalExceptionHandler {
             body.put(e.getField(), e.getDefaultMessage());
         }
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
-    }
-
-    @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
-    @ExceptionHandler({ExpiredTokenException.class})
-    public ResponseEntity<Object> handleExpiredToken(ExpiredTokenException exception) {
-        return new ResponseEntity<>(exception.getMessage(), HttpStatus.UNAUTHORIZED);
     }
 
     @ResponseStatus(value = HttpStatus.UNAUTHORIZED)

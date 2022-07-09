@@ -94,16 +94,11 @@ public class OrderServiceImpl implements OrderService {
             employee = mapper.map(order.getEmployee(), EmployeeOrderDto.class);
         }
 
-        ClientOrderDto client = new ClientOrderDto();
+        ClientOrderDto client;
         if (order.getClient() != null) {
             client = mapper.map(order.getClient(), ClientOrderDto.class);
         } else {
-            client.setUserFirstName("Użytkownik prawdopodobnie został usunięty!");
-            client.setUserBuildingNumber(1);
-            client.setUserLastName("");
-            client.setUserCity("  ");
-            client.setUserPostalCode("  ");
-            client.setUserStreet("  ");
+            client = getDefaultClient();
         }
 
         var stuff = mapper.map(order.getStuff(), StuffOrderDto.class);
@@ -114,6 +109,17 @@ public class OrderServiceImpl implements OrderService {
         orderDto.setStuff(stuff);
 
         return orderDto;
+    }
+
+    private ClientOrderDto getDefaultClient() {
+        var client = new ClientOrderDto();
+        client.setUserFirstName("Użytkownik prawdopodobnie został usunięty!");
+        client.setUserBuildingNumber(1);
+        client.setUserLastName("");
+        client.setUserCity("  ");
+        client.setUserPostalCode("  ");
+        client.setUserStreet("  ");
+        return client;
     }
 
     @Override

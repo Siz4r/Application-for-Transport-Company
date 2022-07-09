@@ -22,14 +22,12 @@ import static org.springframework.http.MediaType.APPLICATION_OCTET_STREAM_VALUE;
 public class FileController {
     private final FileService service;
 
-    @PostMapping(value = "/{ownerId}/{sendToId}")
+    @PostMapping(value = "/{sendToId}")
     @ResponseStatus(HttpStatus.CREATED)
     public void addFile(@RequestParam("file") MultipartFile file,
-                        @PathVariable("ownerId") UUID ownerId,
                         @PathVariable("sendToId") UUID sendToId) {
         try {
             service.updateAnImage(FileUploadCommand.builder()
-                    .fromId(ownerId)
                     .sendToId(sendToId)
                     .name(file.getOriginalFilename())
                     .bytes(file.getBytes()).build());
@@ -48,11 +46,5 @@ public class FileController {
     @ResponseStatus(HttpStatus.ACCEPTED)
     public void deleteFile(@PathVariable("id") UUID id) throws Exception {
         service.deleteAnImage(id);
-    }
-
-    @GetMapping("{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public FileDto getFileById(@PathVariable("id") UUID id) {
-        return service.getFileById(id);
     }
 }

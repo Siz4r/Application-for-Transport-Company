@@ -1,7 +1,6 @@
-package com.example.licencjat.userData;
+package com.example.licencjat.user;
 
-import com.example.licencjat.UI.Annotations.PreAuthorizeAdmin;
-import com.example.licencjat.userData.models.*;
+import com.example.licencjat.user.models.*;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

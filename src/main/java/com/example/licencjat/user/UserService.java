@@ -1,7 +1,7 @@
-package com.example.licencjat.userData;
+package com.example.licencjat.user;
 
-import com.example.licencjat.authorities.models.ROLES;
-import com.example.licencjat.userData.models.*;
+import com.example.licencjat.user.authorities.models.ROLES;
+import com.example.licencjat.user.models.*;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 

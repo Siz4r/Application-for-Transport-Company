@@ -1,6 +1,6 @@
-package com.example.licencjat.userData;
+package com.example.licencjat.user;
 
-import com.example.licencjat.userData.models.User;
+import com.example.licencjat.user.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

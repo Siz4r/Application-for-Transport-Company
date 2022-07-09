@@ -1,6 +1,6 @@
-package com.example.licencjat.authorities;
+package com.example.licencjat.user.authorities;
 
-import com.example.licencjat.authorities.models.AuthorityGroup;
+import com.example.licencjat.user.authorities.models.AuthorityGroup;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Repository;

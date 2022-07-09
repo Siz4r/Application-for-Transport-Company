@@ -1,4 +1,4 @@
-package com.example.licencjat.userData.models;
+package com.example.licencjat.user.models;
 
 import com.example.licencjat.files.models.File;
 import lombok.Getter;

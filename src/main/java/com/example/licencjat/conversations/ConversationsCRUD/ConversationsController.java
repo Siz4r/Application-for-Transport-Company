@@ -21,11 +21,10 @@ import java.util.UUID;
 public class ConversationsController {
     private final ConversationsService service;
     private SimpMessagingTemplate simpMessagingTemplate;
-    private AuthenticationFacade authenticationFacade;
 
     @GetMapping
     @ResponseStatus(value = HttpStatus.OK)
-//    @PreAuthorizeAny
+    @PreAuthorizeAny
     public List<ConversationListDTO> getConversations() {
         return service.getConversations();
     }
@@ -42,15 +41,12 @@ public class ConversationsController {
     @PostMapping
     public ConversationListDTO createConv(@Valid @RequestBody ConversationWebInput webInput) {
         var conv = service.createConversation(webInput);
-        var userId = authenticationFacade.getCurrentAuthenticatedUser().getId();
-        System.out.println(conv.getConversationName());
+
         for (var u :
                 conv.getUsers()) {
-//                if (!userId.equals(u.getId()))
                    simpMessagingTemplate.convertAndSendToUser(u.getId().toString(),"/new",conv);
         }
+
         return conv;
     }
-
-
 }

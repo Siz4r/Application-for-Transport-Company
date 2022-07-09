@@ -22,7 +22,7 @@ public class StuffController {
     @PostMapping
     @PreAuthorizeAdmin
     public ResponseEntity<String> addStuff(@Valid @RequestBody StuffWebInput webInput) {
-        return new ResponseEntity<String>(
+        return new ResponseEntity<>(
                 stuffService.addStuff(StuffServiceCommand.builder().webInput(webInput).build()).toString(),
                 HttpStatus.CREATED);
     }

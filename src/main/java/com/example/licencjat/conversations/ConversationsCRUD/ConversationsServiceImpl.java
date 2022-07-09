@@ -10,8 +10,8 @@ import com.example.licencjat.exceptions.NotFoundExceptions.IncorrectIdInputExcep
 import com.example.licencjat.messages.MessageRepository;
 import com.example.licencjat.messages.models.MessageOutPut;
 import com.example.licencjat.security.AuthenticationFacade;
-import com.example.licencjat.userData.UserRepository;
-import com.example.licencjat.userData.models.UserChatDto;
+import com.example.licencjat.user.UserRepository;
+import com.example.licencjat.user.models.UserChatDto;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -38,9 +38,7 @@ public class ConversationsServiceImpl implements ConversationsService{
                 .filter(c -> {
                     var conversationUsers = conversationsUserRepository.getAllByConversation_Id(c.getId());
                     return conversationUsers.stream().
-                            filter(conversationsUser -> {
-                                return conversationsUser.getUser().getId().equals(userId);
-                            })
+                            filter(conversationsUser -> conversationsUser.getUser().getId().equals(userId))
                             .collect(Collectors.toSet()).size() >= 1;
                 })
                 .map(c -> {
@@ -80,8 +78,6 @@ public class ConversationsServiceImpl implements ConversationsService{
         var conv = Conversation.builder()
                 .id(id)
                 .name(webInput.getName()).build();
-
-        System.out.println("elo");
 
         conversationRepository.save(conv);
 

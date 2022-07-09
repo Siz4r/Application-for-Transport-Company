@@ -1,7 +1,7 @@
 package com.example.licencjat.client;
 
 import com.example.licencjat.UI.idGenerator.IdGenerator;
-import com.example.licencjat.authorities.models.ROLES;
+import com.example.licencjat.user.authorities.models.ROLES;
 import com.example.licencjat.client.models.Client;
 import com.example.licencjat.client.models.ClientCommand;
 import com.example.licencjat.client.models.ClientDto;
@@ -9,14 +9,13 @@ import com.example.licencjat.client.models.ClientListDto;
 import com.example.licencjat.exceptions.ForbiddenException;
 import com.example.licencjat.exceptions.NotFoundExceptions.IncorrectIdInputException;
 import com.example.licencjat.security.AuthenticationFacade;
-import com.example.licencjat.userData.UserServiceImpl;
-import com.example.licencjat.userData.models.UserServiceCommand;
+import com.example.licencjat.user.UserServiceImpl;
+import com.example.licencjat.user.models.UserServiceCommand;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 

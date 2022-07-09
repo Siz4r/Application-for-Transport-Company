@@ -12,5 +12,4 @@ public class FileUploadCommand {
     private final byte[] bytes;
     private final String name;
     private final UUID sendToId;
-    private final UUID fromId;
 }

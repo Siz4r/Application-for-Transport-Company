@@ -1,4 +1,4 @@
-package com.example.licencjat.authorities.models;
+package com.example.licencjat.user.authorities.models;
 
 public enum ROLES {
     CLIENT,

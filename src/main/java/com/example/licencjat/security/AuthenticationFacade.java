@@ -1,6 +1,6 @@
 package com.example.licencjat.security;
 
-import com.example.licencjat.userData.models.UserDataDto;
+import com.example.licencjat.user.models.UserDataDto;
 
 import java.util.List;
 
