@@ -22,15 +22,13 @@ import java.util.UUID;
 public class OrderController {
     private final OrderService orderService;
 
-    @PostMapping("{stuffId}/{userId}")
+    @PostMapping("{stuffId}")
     @ResponseStatus(value = HttpStatus.CREATED, reason = "Resource created successfully")
     @PreAuthorizeAdminAndClient
     public void addOrder(@Valid @RequestBody OrderWebInput webInput,
-                         @PathVariable("stuffId") UUID stuffId,
-                         @PathVariable("userId") UUID userId) {
+                         @PathVariable("stuffId") UUID stuffId) {
         orderService.addOrder(OrderCommand.builder()
                 .stuffId(stuffId)
-                .userId(userId)
                 .webInput(webInput).build());
     }
 
@@ -41,18 +39,11 @@ public class OrderController {
         return orderService.getOrders();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorizeAny
     public OrderDetailsDto getOrderById(@PathVariable("id") UUID id) {
         return orderService.getOrderById(OrderCommand.builder().orderId(id).build());
-    }
-
-    @DeleteMapping("{id}")
-    @ResponseStatus(value = HttpStatus.NO_CONTENT, reason = "Resource deleted successfully")
-    @PreAuthorizeAdmin
-    public void deleteOrder(@PathVariable("id") UUID id) {
-        orderService.deleteOrder(OrderCommand.builder().orderId(id).build());
     }
 
     @PutMapping("{id}")

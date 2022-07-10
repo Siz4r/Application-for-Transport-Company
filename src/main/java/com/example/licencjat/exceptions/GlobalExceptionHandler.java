@@ -2,6 +2,7 @@ package com.example.licencjat.exceptions;
 
 import com.example.licencjat.exceptions.IllegalArgumentExceptions.IncorrectInputDataException;
 import com.example.licencjat.exceptions.IllegalArgumentExceptions.IncorrectPhoneNumberException;
+import com.example.licencjat.exceptions.IllegalArgumentExceptions.NotEnoughResourceAmount;
 import com.example.licencjat.exceptions.IllegalArgumentExceptions.WrongEmailException;
 import com.example.licencjat.exceptions.NotFoundExceptions.CloudinaryException;
 import com.example.licencjat.exceptions.NotFoundExceptions.IncorrectIdInputException;
@@ -25,7 +26,7 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({WrongEmailException.class, IncorrectPhoneNumberException.class, IncorrectInputDataException.class})
+    @ExceptionHandler({WrongEmailException.class, IncorrectPhoneNumberException.class, IncorrectInputDataException.class, NotEnoughResourceAmount.class})
     public ResponseEntity<Object> registerSimpleIllegalArgumentsExceptions(IllegalArgumentException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
     }

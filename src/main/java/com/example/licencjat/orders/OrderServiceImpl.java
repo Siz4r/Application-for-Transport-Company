@@ -15,6 +15,7 @@ import com.example.licencjat.security.AuthenticationFacade;
 import com.example.licencjat.stuff.StuffRepository;
 import com.example.licencjat.stuff.models.Stuff;
 import com.example.licencjat.stuff.models.StuffOrderDto;
+import com.example.licencjat.user.UserRepository;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -38,19 +39,12 @@ public class OrderServiceImpl implements OrderService {
     public void addOrder(OrderCommand command) {
         var stuff = stuffRepository.findById(command.getStuffId()).orElseThrow(IncorrectIdInputException::new);
 
-        checkIfThereIsEnoughAmount(command, stuff);
+        checkIfThereIsEnoughAmount(stuff, command.getWebInput().getAmount());
 
-        var clientList = clientRepository.findAll()
-                .stream().filter(c -> c.getUser().getId().equals(command.getUserId()))
-                .collect(Collectors.toList());
-
-        if (clientList.size() == 0) {
-            throw new IncorrectIdInputException();
-        }
-
-        var client = clientList.get(0);
+        var client = clientRepository.findClientByUserId(authenticationFacade.getCurrentAuthenticatedUser().getId()).orElseThrow(IncorrectIdInputException::new);
 
         var order = mapper.map(command.getWebInput(), Order.class);
+
         order.setId(UUID.fromString(idGenerator.generateId()));
         order.setDone(false);
         order.setClient(client);
@@ -61,11 +55,6 @@ public class OrderServiceImpl implements OrderService {
 
         client.addOrder(order);
         clientRepository.save(client);
-    }
-
-    @Override
-    public void deleteOrder(OrderCommand command) {
-        orderRepository.deleteById(command.getOrderId());
     }
 
     @Override
@@ -90,6 +79,7 @@ public class OrderServiceImpl implements OrderService {
     public OrderDetailsDto getOrderById(OrderCommand command) {
         var order = orderRepository.findById(command.getOrderId()).orElseThrow(IncorrectIdInputException::new);
         var employee = new EmployeeOrderDto();
+
         if (order.getEmployee() != null) {
             employee = mapper.map(order.getEmployee(), EmployeeOrderDto.class);
         }
@@ -104,6 +94,7 @@ public class OrderServiceImpl implements OrderService {
         var stuff = mapper.map(order.getStuff(), StuffOrderDto.class);
 
         var orderDto = mapper.map(order, OrderDetailsDto.class);
+
         orderDto.setClient(client);
         orderDto.setEmployee(employee);
         orderDto.setStuff(stuff);
@@ -138,9 +129,7 @@ public class OrderServiceImpl implements OrderService {
         var differnceInAmount = order.getAmount() - command.getWebInput().getAmount();
         var stuff = order.getStuff();
 
-        if (stuff.getQuantity() + differnceInAmount < 0) {
-            throw new IncorrectInputDataException("There is no enough resources!");
-        }
+        checkIfThereIsEnoughAmount(stuff, -differnceInAmount);
 
         stuff.setQuantity(stuff.getQuantity() + differnceInAmount);
         order.setAmount(command.getWebInput().getAmount());
@@ -153,8 +142,8 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.save(order);
     }
 
-    private void checkIfThereIsEnoughAmount(OrderCommand command, Stuff stuff) {
-        if (stuff.getQuantity() < command.getWebInput().getAmount()) {
+    private void checkIfThereIsEnoughAmount(Stuff stuff, int orderedAmount) {
+        if (stuff.getQuantity() < orderedAmount) {
             throw new NotEnoughResourceAmount("There isn't enough " + stuff.getName() + ".");
         }
     }
