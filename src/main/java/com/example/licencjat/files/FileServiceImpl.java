@@ -10,7 +10,7 @@ import com.example.licencjat.files.models.FileDto;
 import com.example.licencjat.files.models.FileListDto;
 import com.example.licencjat.files.models.FileUploadCommand;
 import com.example.licencjat.security.AuthenticationFacade;
-import com.example.licencjat.userData.UserRepository;
+import com.example.licencjat.user.UserRepository;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,6 @@ import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,7 +38,7 @@ public class FileServiceImpl implements FileService{
     @Override
     public void updateAnImage(FileUploadCommand command) {
         var receiver = userRepository.findById(command.getSendToId()).orElseThrow(IncorrectIdInputException::new);
-        var sender = userRepository.findById(command.getFromId()).orElseThrow(IncorrectIdInputException::new);
+        var sender = userRepository.findById(authenticationFacade.getCurrentAuthenticatedUser().getId()).orElseThrow(IncorrectIdInputException::new);
 
         var fileName = command.getName();
 

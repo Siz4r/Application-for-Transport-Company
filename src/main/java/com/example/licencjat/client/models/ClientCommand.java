@@ -1,6 +1,6 @@
 package com.example.licencjat.client.models;
 
-import com.example.licencjat.userData.models.UserWebInput;
+import com.example.licencjat.user.models.UserWebInput;
 import lombok.Builder;
 import lombok.Getter;
 

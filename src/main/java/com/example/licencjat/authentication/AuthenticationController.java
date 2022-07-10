@@ -3,7 +3,7 @@ package com.example.licencjat.authentication;
 import com.example.licencjat.UI.Annotations.PreAuthorizeAny;
 import com.example.licencjat.authentication.models.AuthenticateRequest;
 import com.example.licencjat.authentication.models.AuthenticationDto;
-import com.example.licencjat.userData.UserService;
+import com.example.licencjat.user.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

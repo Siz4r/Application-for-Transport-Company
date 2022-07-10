@@ -10,6 +10,5 @@ import java.util.UUID;
 public class OrderCommand {
     private final UUID orderId;
     private final UUID stuffId;
-    private final UUID userId;
     private final OrderWebInput webInput;
 }

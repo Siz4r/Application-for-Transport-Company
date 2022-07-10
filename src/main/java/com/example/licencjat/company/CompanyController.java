@@ -24,7 +24,7 @@ public class CompanyController {
     @PostMapping
     @PreAuthorizeAdmin
     public ResponseEntity<String> addCompany(@Valid @RequestBody CompanyWebInput webInput) {
-        return new ResponseEntity<String>(
+        return new ResponseEntity<>(
                 companyService.addCompany(CompanyServiceCommand.builder().webInput(webInput).build()).toString(),
                 HttpStatus.CREATED);
     }
@@ -43,18 +43,10 @@ public class CompanyController {
         return companyService.getCompanyById(CompanyServiceCommand.builder().id(id).build());
     }
 
-//    @PutMapping("{id}")
-//    @ResponseStatus(value = HttpStatus.NO_CONTENT, reason = "Resource updated successfully")
-//    public void updateAStuff(@PathVariable("id") String id, @Valid @RequestBody StuffUpdateCommand updateCommand) {
-//        companyService.editStuff(StuffServiceCommand.builder()
-//                .updateCommand(updateCommand)
-//                .id(id).build());
-//    }
-
     @DeleteMapping("{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT, reason = "Resource deleted successfully")
     @PreAuthorizeAdmin
-    public void deleteStuff(@PathVariable("id") UUID id) {
+    public void deleteCompany(@PathVariable("id") UUID id) {
         companyService.deleteCompany(CompanyServiceCommand.builder().id(id).build());
     }
 }

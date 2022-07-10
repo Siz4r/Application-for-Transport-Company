@@ -1,6 +1,6 @@
 package com.example.licencjat.files.models;
 
-import com.example.licencjat.userData.models.User;
+import com.example.licencjat.user.models.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
@@ -8,7 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Builder

@@ -1,7 +1,7 @@
 package com.example.licencjat.conversations.ConversationsUser;
 
 import com.example.licencjat.conversations.ConversationsCRUD.models.Conversation;
-import com.example.licencjat.userData.models.User;
+import com.example.licencjat.user.models.User;
 import lombok.*;
 
 import javax.persistence.Entity;

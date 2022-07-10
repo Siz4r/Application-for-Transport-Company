@@ -1,16 +1,15 @@
-package com.example.licencjat.userData;
+package com.example.licencjat.user;
 
 import com.example.licencjat.UI.PasswordService;
 import com.example.licencjat.UI.idGenerator.IdGenerator;
 import com.example.licencjat.authentication.ExpiredTokenException;
-import com.example.licencjat.authorities.AuthorityRepository;
-import com.example.licencjat.authorities.models.AuthorityGroup;
-import com.example.licencjat.authorities.models.ROLES;
+import com.example.licencjat.user.authorities.AuthorityRepository;
+import com.example.licencjat.user.authorities.models.ROLES;
 import com.example.licencjat.email.EmailSenderServiceImpl;
 import com.example.licencjat.exceptions.IllegalArgumentExceptions.IncorrectPhoneNumberException;
 import com.example.licencjat.exceptions.NotFoundExceptions.IncorrectIdInputException;
 import com.example.licencjat.exceptions.IllegalArgumentExceptions.IncorrectInputDataException;
-import com.example.licencjat.userData.models.*;
+import com.example.licencjat.user.models.*;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,7 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;

@@ -1,6 +1,6 @@
 package com.example.licencjat.authentication.models;
 
-import com.example.licencjat.userData.models.UserDataDto;
+import com.example.licencjat.user.models.UserDataDto;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 

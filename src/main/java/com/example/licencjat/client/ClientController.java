@@ -5,12 +5,10 @@ import com.example.licencjat.UI.Annotations.PreAuthorizeAdminAndClient;
 import com.example.licencjat.client.models.ClientDto;
 import com.example.licencjat.client.models.ClientListDto;
 import com.example.licencjat.client.models.ClientCommand;
-import com.example.licencjat.stuff.models.StuffServiceCommand;
-import com.example.licencjat.userData.models.UserWebInput;
+import com.example.licencjat.user.models.UserWebInput;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

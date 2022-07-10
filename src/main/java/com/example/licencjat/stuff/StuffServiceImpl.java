@@ -41,19 +41,10 @@ public class StuffServiceImpl implements StuffService{
         var stuff = stuffRepository.findById(command.getId()).orElseThrow(IncorrectIdInputException::new);
         var stuffs = stuffRepository.findAll();
 
-        for (var s:
-                stuffs) {
-            System.out.println(s.getName());
-        }
         var index = stuffs.indexOf(stuff);
         stuff.setQuantity(command.getUpdateCommand().getQuantity());
         stuff.setPrize(command.getUpdateCommand().getPrize());
         stuffs.set(index, stuff);
-
-        for (var s:
-             stuffs) {
-            System.out.println(s.getName());
-        }
 
         stuffRepository.saveAll(stuffs);
     }

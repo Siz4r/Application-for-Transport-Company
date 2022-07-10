@@ -1,4 +1,4 @@
-package com.example.licencjat.userData.models;
+package com.example.licencjat.user.models;
 
 import lombok.Getter;
 import org.hibernate.validator.constraints.Range;

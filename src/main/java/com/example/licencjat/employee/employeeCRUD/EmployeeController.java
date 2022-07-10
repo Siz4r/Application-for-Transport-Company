@@ -2,11 +2,10 @@ package com.example.licencjat.employee.employeeCRUD;
 
 import com.example.licencjat.UI.Annotations.PreAuthorizeAdmin;
 import com.example.licencjat.UI.Annotations.PreAuthorizeAdminAndEmployee;
-import com.example.licencjat.client.models.ClientCommand;
 import com.example.licencjat.employee.employeeCRUD.models.EmployeeDto;
 import com.example.licencjat.employee.employeeCRUD.models.EmployeeListDto;
 import com.example.licencjat.employee.employeeCRUD.models.EmployeeServiceCommand;
-import com.example.licencjat.userData.models.UserWebInput;
+import com.example.licencjat.user.models.UserWebInput;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,14 +40,6 @@ public class EmployeeController {
     public ResponseEntity<String> createAnEmployee(@RequestBody @Valid UserWebInput webInput) {
         return new ResponseEntity<>(
                 service.addAnEmployee(EmployeeServiceCommand.builder().webInput(webInput).build()).toString(),
-                HttpStatus.CREATED);
-    }
-
-    @PostMapping("/admins")
-    @PreAuthorizeAdmin
-    public ResponseEntity<String> createAnAdmin(@RequestBody @Valid UserWebInput webInput) {
-        return new ResponseEntity<>(
-                service.addAnAdmin(EmployeeServiceCommand.builder().webInput(webInput).build()).toString(),
                 HttpStatus.CREATED);
     }
 

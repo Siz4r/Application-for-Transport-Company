@@ -1,8 +1,8 @@
 package com.example.licencjat.exceptions;
 
-import com.example.licencjat.authentication.ExpiredTokenException;
 import com.example.licencjat.exceptions.IllegalArgumentExceptions.IncorrectInputDataException;
 import com.example.licencjat.exceptions.IllegalArgumentExceptions.IncorrectPhoneNumberException;
+import com.example.licencjat.exceptions.IllegalArgumentExceptions.NotEnoughResourceAmount;
 import com.example.licencjat.exceptions.IllegalArgumentExceptions.WrongEmailException;
 import com.example.licencjat.exceptions.NotFoundExceptions.CloudinaryException;
 import com.example.licencjat.exceptions.NotFoundExceptions.IncorrectIdInputException;
@@ -20,12 +20,13 @@ import java.util.Map;
 
 /*
  * Catch and handle exceptions thrown by controllers.
+ * Doesn't include those throw by JWT filter
  * */
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({WrongEmailException.class, IncorrectPhoneNumberException.class, IncorrectInputDataException.class})
+    @ExceptionHandler({WrongEmailException.class, IncorrectPhoneNumberException.class, IncorrectInputDataException.class, NotEnoughResourceAmount.class})
     public ResponseEntity<Object> registerSimpleIllegalArgumentsExceptions(IllegalArgumentException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
@@ -44,12 +45,6 @@ public class GlobalExceptionHandler {
             body.put(e.getField(), e.getDefaultMessage());
         }
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
-    }
-
-    @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
-    @ExceptionHandler({ExpiredTokenException.class})
-    public ResponseEntity<Object> handleExpiredToken(ExpiredTokenException exception) {
-        return new ResponseEntity<>(exception.getMessage(), HttpStatus.UNAUTHORIZED);
     }
 
     @ResponseStatus(value = HttpStatus.UNAUTHORIZED)

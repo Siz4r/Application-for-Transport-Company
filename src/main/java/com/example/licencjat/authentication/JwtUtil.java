@@ -2,7 +2,7 @@ package com.example.licencjat.authentication;
 
 import com.example.licencjat.exceptions.NotFoundExceptions.IncorrectIdInputException;
 import com.example.licencjat.exceptions.IllegalArgumentExceptions.IncorrectInputDataException;
-import com.example.licencjat.userData.UserRepository;
+import com.example.licencjat.user.UserRepository;
 import io.jsonwebtoken.*;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
