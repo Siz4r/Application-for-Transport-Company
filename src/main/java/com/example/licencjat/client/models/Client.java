@@ -25,7 +25,8 @@ public class Client {
 
     @JsonManagedReference
     @OneToMany(
-            mappedBy = "client"
+            mappedBy = "client",
+            fetch = FetchType.EAGER
     )
     private List<Order> orderList = new ArrayList<>();
 

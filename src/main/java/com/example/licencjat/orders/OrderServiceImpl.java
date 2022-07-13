@@ -4,7 +4,6 @@ import com.example.licencjat.UI.idGenerator.IdGenerator;
 import com.example.licencjat.client.ClientRepository;
 import com.example.licencjat.client.models.ClientOrderDto;
 import com.example.licencjat.employee.employeeCRUD.models.EmployeeOrderDto;
-import com.example.licencjat.exceptions.IllegalArgumentExceptions.IncorrectInputDataException;
 import com.example.licencjat.exceptions.IllegalArgumentExceptions.NotEnoughResourceAmount;
 import com.example.licencjat.exceptions.NotFoundExceptions.IncorrectIdInputException;
 import com.example.licencjat.orders.models.Order;
@@ -15,12 +14,10 @@ import com.example.licencjat.security.AuthenticationFacade;
 import com.example.licencjat.stuff.StuffRepository;
 import com.example.licencjat.stuff.models.Stuff;
 import com.example.licencjat.stuff.models.StuffOrderDto;
-import com.example.licencjat.user.UserRepository;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -40,20 +37,18 @@ public class OrderServiceImpl implements OrderService {
         var stuff = stuffRepository.findById(command.getStuffId()).orElseThrow(IncorrectIdInputException::new);
 
         checkIfThereIsEnoughAmount(stuff, command.getWebInput().getAmount());
+        stuff.setQuantity(stuff.getQuantity() - command.getWebInput().getAmount());
+
 
         var client = clientRepository.findClientByUserId(authenticationFacade.getCurrentAuthenticatedUser().getId()).orElseThrow(IncorrectIdInputException::new);
-
         var order = mapper.map(command.getWebInput(), Order.class);
 
+        order.addStuff(stuff);
         order.setId(UUID.fromString(idGenerator.generateId()));
         order.setDone(false);
-        order.setClient(client);
+        order.addClient(client);
 
-        stuff.setQuantity(stuff.getQuantity() - command.getWebInput().getAmount());
-        stuff.addOrder(order);
         stuffRepository.save(stuff);
-
-        client.addOrder(order);
         clientRepository.save(client);
     }
 

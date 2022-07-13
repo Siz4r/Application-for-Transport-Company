@@ -33,7 +33,8 @@ public class Stuff {
     @OneToMany(
             mappedBy = "stuff",
             cascade = CascadeType.ALL,
-            orphanRemoval = true
+            orphanRemoval = true,
+            fetch = FetchType.EAGER
     )
     private List<Order> orderList = new ArrayList<>();
 
