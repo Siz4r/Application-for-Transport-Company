@@ -9,10 +9,10 @@ import java.util.UUID;
 @Getter
 public class MessageInput {
     @NotNull
-    private UUID convID;
+    private UUID conversationId;
 
     @NotNull
-    private UUID senderID;
+    private UUID ownerId;
 
     @NotBlank
     private String content;

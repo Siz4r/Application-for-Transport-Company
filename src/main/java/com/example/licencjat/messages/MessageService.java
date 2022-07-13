@@ -1,8 +1,7 @@
 package com.example.licencjat.messages;
 
 import com.example.licencjat.UI.idGenerator.IdGenerator;
-import com.example.licencjat.conversations.ConversationsCRUD.ConversationRepository;
-import com.example.licencjat.conversations.ConversationsCRUD.models.Conversation;
+import com.example.licencjat.conversations.ConversationRepository;
 import com.example.licencjat.exceptions.NotFoundExceptions.IncorrectIdInputException;
 import com.example.licencjat.messages.models.Message;
 import com.example.licencjat.messages.models.MessageInput;
@@ -21,9 +20,9 @@ public class MessageService {
 
     public void addMessage(MessageInput input) {
         var id = idGenerator.generateId();
-        var conversation = conversationRepository.findById(input.getConvID()).orElseThrow(IncorrectIdInputException::new);
+        var conversation = conversationRepository.findById(input.getConversationId()).orElseThrow(IncorrectIdInputException::new);
 
-        repository.save(new Message(UUID.fromString(id), conversation, input.getSenderID(), input.getContent(), new Timestamp(System.currentTimeMillis())));
+        repository.save(new Message(UUID.fromString(id), conversation, input.getOwnerId(), input.getContent(), new Timestamp(System.currentTimeMillis())));
     }
 
 }

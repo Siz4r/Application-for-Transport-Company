@@ -21,11 +21,11 @@ public class ChatController {
     public MessageOutPut recMessage(@Payload MessageInput message){
         service.addMessage(message);
         var output = MessageOutPut.builder()
-                .senderId(message.getSenderID())
-                .text(message.getContent())
-                .conversationId(message.getConvID())
+                .ownerId(message.getOwnerId())
+                .content(message.getContent())
+                .conversationId(message.getConversationId())
                 .createdAt(new Timestamp(System.currentTimeMillis())).build();
-        simpMessagingTemplate.convertAndSendToUser(message.getConvID().toString(),"/private",output);
+        simpMessagingTemplate.convertAndSendToUser(message.getConversationId().toString(),"/private",output);
         return output;
     }
 }
