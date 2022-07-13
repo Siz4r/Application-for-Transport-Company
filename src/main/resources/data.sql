@@ -3,7 +3,7 @@ DELETE FROM public.stuff;
 DELETE FROM public.client;
 DELETE FROM public.employee;
 DELETE FROM public.user_groups;
-DELETE FROM public.conversations_user;
+DELETE FROM public.conversation_user;
 DELETE FROM public.file;
 DELETE FROM public.principle_groups;
 DELETE FROM public.user_data;

@@ -1,14 +1,13 @@
 package com.example.licencjat.user.models;
 
-import com.example.licencjat.user.authorities.models.AuthorityGroup;
+import com.example.licencjat.conversations.models.Conversation;
 import com.example.licencjat.files.models.File;
+import com.example.licencjat.user.authorities.models.AuthorityGroup;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Builder
 @NoArgsConstructor
@@ -46,10 +45,21 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "group_id"))
     private List<AuthorityGroup> userGroups= new ArrayList<>();
 
-
+    @ManyToMany
+    @JoinTable(
+            name = "conversation_user",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "conversation_id")
+    )
+    private Set<Conversation> conversations = new HashSet<>();
 
     public void addFile(File file) {
         files.add(file);
         file.setUser(this);
+    }
+
+    public void addConv(Conversation conv) {
+        conversations.add(conv);
+        conv.getUsers().add(this);
     }
 }
