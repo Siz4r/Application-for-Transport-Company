@@ -19,12 +19,7 @@ public class ChatController {
 
     @MessageMapping("/conversationMessage/")
     public MessageOutPut recMessage(@Payload MessageInput message){
-        service.addMessage(message);
-        var output = MessageOutPut.builder()
-                .ownerId(message.getOwnerId())
-                .content(message.getContent())
-                .conversationId(message.getConversationId())
-                .createdAt(new Timestamp(System.currentTimeMillis())).build();
+        var output = service.addMessage(message);
         simpMessagingTemplate.convertAndSendToUser(message.getConversationId().toString(),"/private",output);
         return output;
     }

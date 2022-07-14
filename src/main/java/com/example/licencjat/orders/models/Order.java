@@ -8,6 +8,7 @@ import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -26,17 +27,30 @@ public class Order {
 
     @JsonBackReference
     @ManyToOne
+    @JoinColumn(name = "client_id")
     private Client client;
 
     @JsonBackReference
     @ManyToOne
+    @JoinColumn(name = "employee_id")
     private Employee employee;
 
     @JsonBackReference
     @ManyToOne
+    @JoinColumn(name = "stuff_id", nullable = false)
     private Stuff stuff;
 
     private int amount;
     private Timestamp date = new Timestamp(System.currentTimeMillis());
     private boolean isDone;
+
+    public void addClient(Client client) {
+        setClient(client);
+        client.addOrder(this);
+    }
+
+    public void addStuff(Stuff stuff) {
+        setStuff(stuff);
+        stuff.addOrder(this);
+    }
 }

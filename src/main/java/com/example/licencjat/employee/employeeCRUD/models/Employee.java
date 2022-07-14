@@ -23,7 +23,8 @@ public class Employee {
 
     @JsonManagedReference
     @OneToMany(
-            mappedBy = "employee"
+            mappedBy = "employee",
+            fetch = FetchType.EAGER
     )
     private Set<Order> orderList = new HashSet<>();
 
