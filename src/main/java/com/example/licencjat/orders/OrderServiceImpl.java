@@ -4,7 +4,6 @@ import com.example.licencjat.UI.idGenerator.IdGenerator;
 import com.example.licencjat.client.ClientRepository;
 import com.example.licencjat.client.models.ClientOrderDto;
 import com.example.licencjat.employee.employeeCRUD.models.EmployeeOrderDto;
-import com.example.licencjat.exceptions.IllegalArgumentExceptions.NotEnoughResourceAmount;
 import com.example.licencjat.exceptions.NotFoundExceptions.IncorrectIdInputException;
 import com.example.licencjat.orders.models.Order;
 import com.example.licencjat.orders.models.OrderCommand;
@@ -12,8 +11,6 @@ import com.example.licencjat.orders.models.OrderDetailsDto;
 import com.example.licencjat.orders.models.OrderListDto;
 import com.example.licencjat.security.AuthenticationFacade;
 import com.example.licencjat.stuff.StuffRepository;
-import com.example.licencjat.stuff.models.Stuff;
-import com.example.licencjat.stuff.models.StuffOrderDto;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -72,24 +69,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDetailsDto getOrderById(OrderCommand command) {
         var order = orderRepository.findById(command.getOrderId()).orElseThrow(IncorrectIdInputException::new);
-        var employee = new EmployeeOrderDto();
-
-        if (order.getEmployee() != null) {
-            employee = mapper.map(order.getEmployee(), EmployeeOrderDto.class);
-        }
-
-        ClientOrderDto client = getDefaultClient();
-        if (order.getClient() != null) {
-            client = mapper.map(order.getClient(), ClientOrderDto.class);
-        }
-
-        var stuff = mapper.map(order.getStuff(), StuffOrderDto.class);
 
         var orderDto = mapper.map(order, OrderDetailsDto.class);
 
-        orderDto.setClient(client);
-        orderDto.setEmployee(employee);
-        orderDto.setStuff(stuff);
+        if (orderDto.getEmployee() == null) orderDto.setEmployee(new EmployeeOrderDto());
+        if (orderDto.getClient() == null) orderDto.setClient(getDefaultClient());
 
         return orderDto;
     }
